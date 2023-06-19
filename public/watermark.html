@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <!-- Option 1: Include in HTML -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Upload File</title>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="navbar navbar-light bg-light">
+          <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+              <img
+                src="./watermark-logo-01.png"
+                alt=""
+                width="150"
+                height="24"
+                class="d-inline-block align-text-top"
+              />
+            </a>
+          </div>
+        </nav>
+
+        <div class="main12">
+          <div
+            class="col-lg-6 col-md-12"
+            style="
+              /* display: flex; */
+              justify-content: center;
+              align-items: flex-start;
+              margin-top: 4rem;
+            "
+          >
+            <div class="wallImg1">
+              <div class="wallImg">
+                <img src="./watermark-r.jpeg" alt="" />
+              </div>
+              <div class="wallSecond">
+                <div style="width: 100%">
+                  <h3
+                    style="
+                      display: flex;
+                      justify-content: center;
+                      text-align: center;
+                    "
+                  >
+                    Apply Watermark From Your Images For
+                  </h3>
+                  <p
+                    style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    "
+                  >
+                    100% Automatically and
+                    <span
+                      class="!py-1 !px-4 bg-brush bg-no-repeat bg-cover bg-center"
+                      style="padding: 3px; padding-left: 10px"
+                    >
+                      Free
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="bottomImg"><img src="./main2.png" alt="img" /></div>
+          </div>
+          <div class="col-lg-6 col-md-12">
+            <div class="wrapper">
+              <!-- <div class="topImg" style="float: right; margin-right: -37%">
+                <img src="./main3.png" alt="" />
+              </div> -->
+              <br />
+              <br />
+              <br />
+              <div class="box pl-0">
+                <div class="keyboard_box">
+                  <div class="typeKeyboard">
+                    <input
+                      type="text"
+                      id="demo"
+                      class="typeval"
+                      placeholder="Ice Skating"
+                      readonly=""
+                      value=""
+                    />
+                  </div>
+                  <div
+                    class="Keyboard-module"
+                    role="group"
+                    aria-label="Keyboard"
+                  >
+                    <div class="mx-auto">
+                      <div
+                        class="Keyboard-module_row my-2 flex items-center gap1"
+                      >
+                        <button
+                          type="button"
+                          data-key="Q"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          q</button
+                        ><button
+                          type="button"
+                          data-key="W"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          w</button
+                        ><button
+                          type="button"
+                          data-key="E"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          e</button
+                        ><button
+                          type="button"
+                          data-key="R"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          r</button
+                        ><button
+                          type="button"
+                          data-key="T"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          t</button
+                        ><button
+                          type="button"
+                          data-key="Y"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          y</button
+                        ><button
+                          type="button"
+                          data-key="U"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          u</button
+                        ><button
+                          type="button"
+                          data-key="I"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          i</button
+                        ><button
+                          type="button"
+                          data-key="O"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          o</button
+                        ><button
+                          type="button"
+                          data-key="P"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          p
+                        </button>
+                      </div>
+                      <div
+                        class="Keyboard-module_row my-2 flex items-center gap1"
+                      >
+                        <div data-testid="spacer" class="keygap"></div>
+                        <button
+                          type="button"
+                          data-key="A"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          a</button
+                        ><button
+                          type="button"
+                          data-key="S"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          s</button
+                        ><button
+                          type="button"
+                          data-key="D"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          d</button
+                        ><button
+                          type="button"
+                          data-key="F"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          f</button
+                        ><button
+                          type="button"
+                          data-key="G"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          g</button
+                        ><button
+                          type="button"
+                          data-key="H"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          h</button
+                        ><button
+                          type="button"
+                          data-key="J"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          j</button
+                        ><button
+                          type="button"
+                          data-key="K"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          k</button
+                        ><button
+                          type="button"
+                          data-key="L"
+                          class="Key-module_row-button flex typebton items-center justify-center"
+                        >
+                          l
+                        </button>
+                        <div data-testid="spacer" class="keygap"></div>
+                      </div>
+                      <div
+                        class="Keyboard-module_row my-2 flex items-center gap1"
+                      >
+                        <button
+                          type="button"
+                          id="submitbtn"
+                          data-key="en"
+                          class="Key-module_row-button flex specialbtn items-center justify-center Key-module_oneAndAHalf__K6JBY"
+                        >
+                          enter</button
+                        ><button
+                          type="button"
+                          data-key="Z"
+                          class="Key-module_row-button typebton flex items-center justify-center"
+                        >
+                          z</button
+                        ><button
+                          type="button"
+                          data-key="X"
+                          class="Key-module_row-button typebton flex items-center justify-center"
+                        >
+                          x</button
+                        ><button
+                          type="button"
+                          data-key="C"
+                          class="Key-module_row-button typebton flex items-center justify-center"
+                        >
+                          c</button
+                        ><button
+                          type="button"
+                          data-key="V"
+                          class="Key-module_row-button typebton flex items-center justify-center"
+                        >
+                          v</button
+                        ><button
+                          type="button"
+                          data-key="B"
+                          class="Key-module_row-button typebton flex items-center justify-center"
+                        >
+                          b</button
+                        ><button
+                          type="button"
+                          data-key="N"
+                          class="Key-module_row-button typebton flex items-center justify-center"
+                        >
+                          n</button
+                        ><button
+                          type="button"
+                          data-key="M"
+                          class="Key-module_row-button typebton flex items-center justify-center"
+                        >
+                          m</button
+                        ><button
+                          type="button"
+                          data-key="back"
+                          aria-label="backspace"
+                          class="Key-module_row-button flex specialbtn typebton items-center justify-center Key-module_oneAndAHalf__K6JBY"
+                        >
+                          &nbsp;&nbsp;<svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            width="30"
+                            class="game-icon"
+                            data-testid="icon-backspace"
+                          >
+                            <path
+                              fill="var(--color-tone-1)"
+                              d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"
+                            ></path>
+                          </svg>
+                          &nbsp;&nbsp;
+                        </button>
+                      </div>
+                      <div
+                        class="Keyboard-module_row my-2 flex items-center gap1"
+                      >
+                        <div data-testid="spacer" class="keygap"></div>
+                        <button
+                          type="button"
+                          data-key=" "
+                          class="Key-module_row-button spacebutton flex items-center justify-center"
+                        >
+                          Space
+                        </button>
+                        <div data-testid="spacer" class="keygap"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- <div class="input-box">
+                  <input
+                    type="file"
+                    onchange="uploadImage(event)"
+                    id="upload"
+                    hidden
+                    multiple
+                    accept="image/*"
+                  />
+                  <label for="upload" class="uploadlabel">
+                    <span><i class="fa fa-cloud-upload"></i></span>
+                    <p>Upload Images</p>
+                    <h4>or drop a file,</h4>
+                    <h5>paste image or URL</h5>
+                  </label>
+                </div>
+                <div class="max-w-md">
+                  <div
+                    class="flex flex-col gap-2 sm:flex-row justify-between items-center mt-4"
+                    style="display: flex; align-items: center"
+                  >
+                    <div
+                      class="flex gap-2"
+                      style="
+                        display: flex;
+                        width: 100%;
+                        justify-content: center;
+                      "
+                    >
+                      <button
+                        class="btn12 !rounded-lg overflow-hidden select-none shrink-0 !border h-12 w-12 sm:w-16 sm:h-16 transition ease-in-out active:scale-[0.98] focus:outline-none focus:ring-none focus-visible:ring focus-visible:ring-offset-2 focus-visible:ring-primary-hover focus-visible:outline-none !border-secondary no-touch-hover:sm:hover:-translate-y-1"
+                        ondragstart="return false;"
+                        onclick="Left()"
+                      >
+                        Top Left</button
+                      ><button
+                        class="btn12 !rounded-lg overflow-hidden select-none shrink-0 !border h-12 w-12 sm:w-16 sm:h-16 transition ease-in-out active:scale-[0.98] focus:outline-none focus:ring-none focus-visible:ring focus-visible:ring-offset-2 focus-visible:ring-primary-hover focus-visible:outline-none !border-secondary no-touch-hover:sm:hover:-translate-y-1"
+                        ondragstart="return false;"
+                        onclick="Right()"
+                      >
+                        Top Right</button
+                      ><button
+                        class="btn12 !rounded-lg overflow-hidden select-none shrink-0 !border h-12 w-12 sm:w-16 sm:h-16 transition ease-in-out active:scale-[0.98] focus:outline-none focus:ring-none focus-visible:ring focus-visible:ring-offset-2 focus-visible:ring-primary-hover focus-visible:outline-none !border-secondary no-touch-hover:sm:hover:-translate-y-1"
+                        ondragstart="return false;"
+                        onclick="BottomLeft()"
+                      >
+                        Bottom Left</button
+                      ><button
+                        class="btn12 !rounded-lg overflow-hidden select-none shrink-0 !border h-12 w-12 sm:w-16 sm:h-16 transition ease-in-out active:scale-[0.98] focus:outline-none focus:ring-none focus-visible:ring focus-visible:ring-offset-2 focus-visible:ring-primary-hover focus-visible:outline-none !border-secondary no-touch-hover:sm:hover:-translate-y-1"
+                        ondragstart="return false;"
+                        onclick="BottomRight()"
+                      >
+                        Bottom Right
+                      </button>
+                      <button
+                        class="btn12 !rounded-lg overflow-hidden select-none shrink-0 !border h-12 w-12 sm:w-16 sm:h-16 transition ease-in-out active:scale-[0.98] focus:outline-none focus:ring-none focus-visible:ring focus-visible:ring-offset-2 focus-visible:ring-primary-hover focus-visible:outline-none !border-secondary no-touch-hover:sm:hover:-translate-y-1"
+                        ondragstart="return false;"
+                        onclick="Center()"
+                      >
+                        Center
+                      </button>
+                    </div>
+                  </div>
+                  <p
+                    class="text-2xs text-typo-secondary text-center sm:!text-left !mt-4"
+                    style="
+                      font-size: 0.625rem;
+                      line-height: 1rem;
+                      color: #67727c;
+                      text-align: left !important;
+                    "
+                  >
+                    By uploading an image or URL you agree to our
+                    <a
+                      target="_blank"
+                      class="text-typo-secondary underline"
+                      draggable="false"
+                      href="/tos"
+                      >Terms of Service</a
+                    >. This site is protected by hCaptcha and its
+                    <a
+                      target="_blank"
+                      rel="noopener"
+                      class="text-typo-secondary underline"
+                      draggable="false"
+                      href="https://hcaptcha.com/privacy"
+                      >Privacy Policy</a
+                    >
+                    and
+                    <a
+                      target="_blank"
+                      rel="noopener"
+                      class="text-typo-secondary underline"
+                      draggable="false"
+                      href="https://hcaptcha.com/terms"
+                      >Terms of Service</a
+                    >
+                    apply.
+                  </p>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <div style="display: flex; justify-content: center">
+          <div id="filewrapper">
+            <h3 class="uploaded">History</h3>
+            <div class="showfilebox" id="showfilebox"></div>
+          </div>
+        </div> -->
+
+        <div class="section2 y-12 md:py-24">
+          <div class="sec1">
+            <div class="secIMg">
+              <img src="./signature-logo.jpg" alt="" />
+            </div>
+            <div class="contentSec">
+              <div>
+                <h2>Integrates with your Software Workflow</h2>
+                <p>
+                  We've built tools and plugins for some of the most popular
+                  design programs, eCommerce sites and computer environments. To
+                  bring more digital efficiency to your own workflow, use our
+                  API!
+                </p>
+                <div class="progress" id="progress">
+                  <div
+                    class="progress-bar"
+                    id="progress-bar"
+                    role="progressbar"
+                    style="width: 2%"
+                    aria-valuenow="25"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  >
+                    25%
+                  </div>
+                </div>
+                <div class="regenerate">
+                  <button onclick="main12()">generate watermark</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer>
+          <div class="footer">
+            <div class="company-info">
+              <h4>Company Name</h4>
+              <p>123 Main Street, City, Country</p>
+              <p>Phone: (123) 456-7890</p>
+              <p>Email: info@example.com</p>
+            </div>
+            <div class="contact-info">
+              <h4>Contact Us</h4>
+              <a href="mailto:">hello@gmail.com</a>
+              <p>address</p>
+            </div>
+            <div class="social-links">
+              <h4>Follow Us</h4>
+              <ul>
+                <li>
+                  <a href="#"><i class="bi bi-facebook"></i> hello@gmail.com</a>
+                </li>
+                <li>
+                  <a href="#"><i class="bi bi-twitter"></i> hello@gmail.com</a>
+                </li>
+                <li>
+                  <a href="#"
+                    ><i class="bi bi-instagram"></i> hello@gmail.com</a
+                  >
+                </li>
+                <li>
+                  <a href="#"><i class="bi bi-linkedin"></i> hello@gmail.com</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              background-color: #bebebe;
+              color: #7e7c85;
+              align-items: center;
+              padding: 14px 47px;
+              text-align: center;
+            "
+          >
+            <p>&copy; 2023 Your Company. All rights reserved.</p>
+            <p>Privacy Policy . Terms and Service</p>
+          </div>
+        </footer>
+      </div>
+    </div>
+
+    <script>
+      handleUpdate();
+      function handleUpdate() {
+        fetch("https://oemdieselparts.com/pic/api/get/images")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to fetch images");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            // Handle the data received from the API
+            const images = data.images;
+            const showfilebox = document.getElementById("showfilebox");
+            let Image12 = [
+              // "./download (1).jpg",
+              // "./download (2).jpg",
+              // "./download (3).jpg",
+              // "./download.jpg",
+              // "./Music_Icon.jpg",
+            ];
+            Image12.push(...images);
+
+            if (Array.isArray(Image12)) {
+              showfilebox.innerHTML = "";
+              Image12.forEach((image, index) => {
+                const imgElement = document.createElement("img");
+                imgElement.src = image;
+                imgElement.alt = "img";
+                // imgElement.setAttribute("key", index);
+                showfilebox.innerHTML += `<img src="${image}" />`;
+              });
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+            // Handle the error
+          });
+      }
+      let style1 = "";
+
+      function uploadImage(event) {
+        event.preventDefault(); // Prevent form submission
+        const fileInput = document.getElementById("upload");
+        const files = fileInput.files;
+
+        if (files) {
+          const formData = new FormData();
+          for (var i = 0; i < files.length; i++) {
+            formData.append("image", files[i]);
+          }
+          // formData.append("image", file);
+          formData.append("style", style1);
+
+          // Make a fetch request to the server
+          fetch("https://oemdieselparts.com/pic/api/imgUpload/upload", {
+            method: "POST",
+            body: formData,
+          })
+            .then((response) => {
+              if (response.ok) {
+                return response.text();
+              } else {
+                throw new Error("Image upload failed.");
+              }
+            })
+            .then((imagePath) => {
+              console.log(imagePath);
+              handleUpdate();
+              style1 = "";
+              // displayImage(imagePath);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      }
+
+      const Center = () => {
+        style1 = "Center";
+        console.log(style1, "style1");
+      };
+      const Left = () => {
+        style1 = "top-left";
+        console.log(style1, "style1");
+      };
+      const Right = () => {
+        style1 = "top-Right";
+        console.log(style1, "style1");
+      };
+      const BottomLeft = () => {
+        style1 = "BottomLeft";
+        console.log(style1, "style1");
+      };
+      const BottomRight = () => {
+        style1 = "BottomRight";
+        console.log(style1, "style1");
+      };
+
+      const access_token = localStorage.getItem("access_token");
+      if (!access_token) {
+        window.location.href = "https://oemdieselparts.com/pic/";
+      }
+      function runProgress() {
+        var progressBar = document.getElementById("progress-bar");
+        var width = 0; // Starting width
+
+        var interval = setInterval(increaseWidth, 100); // Increase width every 100 milliseconds
+
+        function increaseWidth() {
+          if (width >= 50) {
+            clearInterval(interval); // Stop the interval when width reaches 50
+          } else {
+            width++; // Increase the width
+            progressBar.style.width = width + "%";
+            progressBar.setAttribute("aria-valuenow", width);
+            progressBar.textContent = width + "%";
+          }
+        }
+      }
+
+      // Call the function to start the progress
+      function runProgress1() {
+        var progressBar = document.getElementById("progress-bar");
+        var width = 0; // Starting width
+
+        var interval = setInterval(increaseWidth, 100); // Increase width every 100 milliseconds
+
+        function increaseWidth() {
+          if (width >= 100) {
+            clearInterval(interval); // Stop the interval when width reaches 100
+          } else {
+            width++; // Increase the width
+            progressBar.style.width = width + "%";
+            progressBar.setAttribute("aria-valuenow", width);
+            progressBar.textContent = width + "%";
+            document.getElementById("progress-bar").classList.remove("active");
+          }
+        }
+      }
+      runProgress();
+      // Call the function to start the progress
+
+      async function main12() {
+        try {
+          document.getElementById("progress").classList.add("active");
+          const response1 = await axios.get(
+            "https://oemdieselparts.com/ghost/api/content/posts/?key=62ba5f4d0ae64abf8445ee2054"
+          );
+          const data = response1.data;
+          console.log(data);
+
+          const response2 = await axios.post(
+            "https://oemdieselparts.com/pic/api/all/Alldata",
+            data,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const responseData = response2.data;
+          console.log(responseData, "res");
+
+          responseData ? runProgress1() : "";
+        } catch (error) {
+          console.error(error);
+        }
+
+        runProgress();
+      }
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      // Get the input field and all the keyboard buttons
+      const inputField = document.getElementById("demo");
+      const keyboardButtons = document.querySelectorAll(
+        ".Key-module_row-button"
+      );
+
+      // Add click event listeners to the keyboard buttons
+      keyboardButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          // Get the value of the clicked button
+          const buttonValue = button.getAttribute("data-key");
+
+          if (buttonValue === "Space") {
+            // Update the input field value with a space character
+            inputField.value += " ";
+          } else if (buttonValue === "back") {
+            // Remove the last character from the input field
+            inputField.value = inputField.value.slice(0, -1);
+          } else if (buttonValue === "en") {
+            postData();
+          } else {
+            // Update the input field value with the clicked button value
+            inputField.value += buttonValue;
+          }
+        });
+      });
+      const postData = async () => {
+        try {
+          const response = await axios.post(
+            "https://oemdieselparts.com/pic/changewatermark",
+            {
+              // Request payload data
+              id: "648ab1684855601a64bcdf5d",
+              watermark: inputField.value,
+            }
+          );
+
+          // Handle the response data
+          Toastify({
+            text: "successfully!",
+            duration: 3000, // Duration in milliseconds
+            close: true, // Show a close button
+            gravity: "top", // Position of the toast message (top, bottom, left, right)
+          }).showToast();
+          // console.log(response.data);
+          // Further processing or UI updates based on the response
+        } catch (error) {
+          console.error(error); // Handle the error
+        }
+      };
+    </script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
