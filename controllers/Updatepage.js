@@ -1,7 +1,3 @@
-
-
-
-
 import mongoose from "mongoose";
 import Page from "../models/Page.js";
 import axios from "axios";
@@ -11,17 +7,19 @@ import sharp from 'sharp';
 import Imagemain from '../models/ImageSchema.js';
 import jwt from "jsonwebtoken";
 import ReplaceStatus from '../models/replacepage.js'
+import watermark from '../models/watermark.js'
+import fsx from 'fs-extra';
 
 
 
-
-const key = '5f9a86ae980832579ebe5e17:c2704ca585b2084347903b9f8aff6f47a13e034440391c41dbc1139f128cc25b';
+const key = 
+  "6492802eb312980350eae3cf:fb5fb378053efe19fd0b06e551cca071d3331b8d2f7cb638b5645c7c96c63e5f";
 const [id, secret] = key.split(':');
 
 const token = jwt.sign({}, Buffer.from(secret, 'hex'), {
   keyid: id,
   algorithm: 'HS256',
-  expiresIn: '50m',
+  expiresIn: '10y',
   audience: '/admin/'
 });
 
@@ -29,466 +27,677 @@ const token = jwt.sign({}, Buffer.from(secret, 'hex'), {
 let obj = {};
 
 
+// export const Updatepage12 = async (req, res, next) => {
+//   const postId = req.body.page.current.id;
+//   obj.id = postId;
+//   let updatedData = req.body;
+
+//   let imageUrl2;
+//   const updatedCards = [];
+//   const updatedCards_define = [];
+//   let mobiledoc;
+//   if (req.body.page.current.mobiledoc) {
+//     mobiledoc = JSON.parse(req.body.page.current.mobiledoc);
+
+//     let cards = mobiledoc.cards;
+//     if (cards) {
+//       for (const card of mobiledoc.cards) {
+//         if (card[0] === "image") {
+//           const imageUrl = card[1].src;
+//           updatedCards.push(imageUrl);
+//           updatedCards_define.push("Card");
+//         } else {
+//           if (card[0] === "gallery") {
+//             const images1 = card[1].images;
+//             let count_gallery_image = 0
+//             let temp_count = count_gallery++
+//             for (const image of images1) {
+//               const imageUrl = image.src;
+//               updatedCards.push(imageUrl);
+//               updatedCards_define.push("gallery");
+//               // updatedCards_index.push(count_gallery_image++);
+//               // updatedCards_gallery_index.push(temp_count);
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+//   updatedCards.push(req.body.page.current.feature_image);
+//   updatedCards_define.push("Feature");
+
+//   let currentDate;
+//   let currentTitle;
+//   let payload;
+//   let featureImage = '';
+//   const mobiledoc_updated = JSON.parse(req.body.page.current.mobiledoc);
+
+
+
+//   const watermarkchange = await watermark.findOne({ "id": "648ab1684855601a64bcdf5d" });
+
+
+//   async function addWatermarkToImage(imageUrl) {
+//     const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
+//     const imageBuffer = Buffer.from(response.data, "binary");
+//     const imageFolderPath = "./public";
+//     const imageFilename = `image_${Date.now()}.png`;
+//     const svgPath = path.join(imageFolderPath, "image.png");
+//     const pngPath = path.join(imageFolderPath, imageFilename);
+
+//     if (fs.existsSync(svgPath)) {
+//       fs.unlinkSync(svgPath);
+//     }
+
+//     const textWatermark = watermarkchange.watermark;
+//     const watermarkColor = "rgba(255, 255, 255, 0.5)";
+
+//     const image = await sharp(imageBuffer);
+//     const metadata = await image.metadata();
+//     const watermarkWidth = metadata.width;
+//     const watermarkHeight = metadata.height;
+
+//     const watermarkSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${watermarkWidth}" height="${watermarkHeight}">
+//                             <text x="${watermarkWidth / 2}" y="${watermarkHeight / 2
+//       }" font-size="24" fill="${watermarkColor}" text-anchor="middle" alignment-baseline="middle">${textWatermark}</text>
+//                           </svg>`;
+
+//     const watermark = await sharp(Buffer.from(watermarkSvg)).png().toBuffer();
+
+//     let filePath = "";
+
+//     filePath = path.join(imageFolderPath, `watermarked_${Date.now()}.png`);
+//     await image.composite([{ input: watermark }]).toFile(filePath);
+//     const ReplaceStatussave = new ReplaceStatus({
+//       id: postId,
+//       feature_imageold: imageUrl,
+//       feature_image: `https://oemdieselparts.com/pic/${filePath.split("/")[1]}`,
+//       hasWatermark: true,
+//       Watermark: watermarkchange.watermark,
+//       DocumentType: "page",
+//     });
+//     await ReplaceStatussave.save();
+//     return filePath;
+//   }
+
+
+//   async function addWatermarkToImage12(imageUrl) {
+//     const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
+//     const imageBuffer = Buffer.from(response.data, "binary");
+//     const imageFolderPath = "./public";
+//     const imageFilename = `image_${Date.now()}.png`;
+//     const svgPath = path.join(imageFolderPath, "image.png");
+//     const pngPath = path.join(imageFolderPath, imageFilename);
+
+//     if (fs.existsSync(svgPath)) {
+//       fs.unlinkSync(svgPath);
+//     }
+
+//     const textWatermark = watermarkchange.watermark;
+//     const watermarkColor = "rgba(255, 255, 255, 0.5)";
+
+//     const image = await sharp(imageBuffer);
+//     const metadata = await image.metadata();
+//     const watermarkWidth = metadata.width;
+//     const watermarkHeight = metadata.height;
+
+//     const watermarkSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${watermarkWidth}" height="${watermarkHeight}">
+//                             <text x="${watermarkWidth / 2}" y="${watermarkHeight / 2
+//       }" font-size="24" fill="${watermarkColor}" text-anchor="middle" alignment-baseline="middle">${textWatermark}</text>
+//                           </svg>`;
+
+//     const watermark = await sharp(Buffer.from(watermarkSvg)).png().toBuffer();
+
+//     let filePath = "";
+
+//     filePath = path.join(imageFolderPath, `watermarked_${Date.now()}.png`);
+//     await image.composite([{ input: watermark }]).toFile(filePath);
+//     const ReplaceStatussave = new ReplaceStatus({ "id": postId });
+//     ReplaceStatussave.feature_image = `https://oemdieselparts.com/pic/${filePath.split("/")[1]}`
+//     ReplaceStatussave.Watermark = watermarkchange.watermark,
+//       await ReplaceStatussave.save();
+//     return filePath;
+//   }
+
+
+
+//   const watermarkPromises = [];
+
+//   for (let i = 0; i < updatedCards.length; i++) {
+//     const mongoID = await ReplaceStatus.findOne({
+//       $or: [
+//         { feature_imageold: updatedCards[i] },
+//         { feature_image: updatedCards[i] },
+//       ],
+//     });
+//     if (!mongoID) {
+//       const watermarkPromise = addWatermarkToImage(updatedCards[i])
+//         .then((watermarkedImagePath) => {
+
+//           currentDate = req.body.page.current.updated_at;
+//           currentTitle = req.body.page.current.title;
+
+//           if (updatedCards_define[i] === 'Feature') {
+//             console.log("Feature work");
+//             featureImage = `https://oemdieselparts.com/pic/${watermarkedImagePath.split("/")[1]}`;
+//           } else if (updatedCards_define[i] === 'Card') {
+//             const cards = mobiledoc_updated.cards;
+//             if (cards) {
+//               for (const [index, card] of cards.entries()) {
+//                 if (card[0] === 'image' && card[1].src === updatedCards[i]) {
+//                   mobiledoc_updated.cards[updatedCards_gallery_index[i]][1].src = `https://oemdieselparts.com/pic/${watermarkedImagePath.split("/")[1]}`;
+//                 }
+//               }
+//             }
+//           } else {
+//             if (req.body.post.current.mobiledoc) {
+//               const cards = mobiledoc_updated.cards;
+//               if (cards) {
+//                 for (const [index, card] of cards.entries()) {
+//                   mobiledoc_updated.cards[updatedCards_gallery_index[i]][1].images[updatedCards_index[i]].src = `https://oemdieselparts.com/pic/${watermarkedImagePath.split("/")[1]}`;
+//                 }
+//               }
+//             }
+//           }
+
+//         })
+//         .catch((error) => {
+//           console.error("Error adding watermark to image:", error);
+//         });
+//       watermarkPromises.push(watermarkPromise);
+//     } else if (mongoID && watermarkchange.watermark !== mongoID.Watermark) {
+//       console.log("tessst2");
+//       console.log(mongoID.feature_imageold);
+//       const watermarkPromise = addWatermarkToImage12(mongoID.feature_imageold, true, updatedCards[i])
+//         .then((watermarkedImagePath) => {
+
+//           const watermarkedImagePath_pathArray = watermarkedImagePath.split("/");
+//           const watermarkedImagePath_final = watermarkedImagePath_pathArray[watermarkedImagePath_pathArray.length - 1];
+
+//           currentDate = req.body.post.current.updated_at;
+//           currentTitle = req.body.post.current.title;
+
+//           if (updatedCards_define[i] === 'Feature') {
+//             featureImage = `https://oemdieselparts.com/pic/${watermarkedImagePath_final}`;
+//             console.log("featureImage");
+//             console.log(featureImage);
+//           } else if (updatedCards_define[i] === 'Card') {
+//             const cards = mobiledoc_updated.cards;
+//             if (cards) {
+//               for (const [index, card] of cards.entries()) {
+//                 if (card[0] === 'image' && card[1].src === updatedCards[i]) {
+//                   mobiledoc_updated.cards[updatedCards_gallery_index[i]][1].src = `https://oemdieselparts.com/pic/${watermarkedImagePath_final}`;
+//                 }
+//               }
+//             }
+//           } else {
+//             if (req.body.post.current.mobiledoc) {
+//               const cards = mobiledoc_updated.cards;
+//               if (cards) {
+//                 for (const [index, card] of cards.entries()) {
+//                   mobiledoc_updated.cards[updatedCards_gallery_index[i]][1].images[updatedCards_index[i]].src = `https://oemdieselparts.com/pic/${watermarkedImagePath_final}`;
+//                 }
+//               }
+//             }
+//           }
+
+//         })
+//         .catch((error) => {
+//           console.error("Error adding watermark to image:");
+//         });
+//       watermarkPromises.push(watermarkPromise);
+//     }
+//   }
+
+//   const url = `https://oemdieselparts.com/ghost/api/admin/pages/${postId}`;
+//   const headers = {
+//     Authorization: `Ghost ${token}`,
+//   };
+
+//   Promise.all(watermarkPromises)
+//     .then(() => {
+//       if (currentDate != '' && currentTitle != '' && typeof currentDate !== 'undefined' && typeof currentTitle !== 'undefined') {
+//         if (featureImage != '' && currentDate != '' && currentTitle != '' && typeof currentDate !== 'undefined' && typeof currentTitle !== 'undefined') {
+//           payload = {
+//             pages: [
+//               {
+//                 id: `${postId}`,
+//                 updated_at: currentDate,
+//                 title: currentTitle,
+//                 feature_image: featureImage,
+//                 mobiledoc: JSON.stringify(mobiledoc_updated)
+//               }
+//             ]
+//           };
+//         } else {
+//           payload = {
+//             pages: [
+//               {
+//                 id: `${postId}`,
+//                 updated_at: currentDate,
+//                 title: currentTitle,
+//                 mobiledoc: JSON.stringify(mobiledoc_updated)
+//               }
+//             ]
+//           };
+//         }
+//       }
+
+//       if (payload != '' && typeof payload !== 'undefined') {
+//         console.log(payload);
+//         const checkFields = async () => {
+//           try {
+//             const response = await axios.put(url, payload, { headers });
+//             console.log(response.data, 'Feature SUCCESS');
+//           } catch (error) {
+//             console.error(error.response.data.errors, 'ERR');
+//           }
+//         };
+//         checkFields();
+//       }
+//     })
+//     .catch((error) => {
+//       console.error("Error adding watermark to images:", error);
+//     });
+// };
+
+
+
 export const Updatepage12 = async (req, res, next) => {
-  const postId = req.body.page.current.id;
-  obj.id = postId;
-  let updatedData = req.body;
+  try {
 
-  let imageUrl2;
-  const updatedCards = [];
-  const updatedCards_define = [];
-  let mobiledoc;
-  if (req.body.page.current.mobiledoc) {
-    mobiledoc = JSON.parse(req.body.page.current.mobiledoc);
-
-    let cards = mobiledoc.cards;
-    if (cards) {
-      imageUrl2 =
-        cards[0] && cards[0][1] && cards[0][1]?.src && cards[0][1]?.src;
-      if (imageUrl2) {
-        for (const card of mobiledoc.cards) {
-          if (card[0] === "image") {
-            const imageUrl = card[1].src;
-            updatedCards.push(imageUrl);
-            updatedCards_define.push("Card");
-          }
-        }
+    async function deleteDirectory(dirPath) {
+      try {
+        await fsx.remove(dirPath);
+        console.log(`Directory '${dirPath}' deleted successfully.`);
+      } catch (err) {
+        console.log(`An error occurred while deleting directory '${dirPath}': ${err.message}`);
       }
     }
-  }
-  updatedCards.push(req.body.page.current.feature_image);
-  updatedCards_define.push("Feature");
 
-  let currentDate;
-  let currentTitle;
-  let payload;
-  let featureImage = '';
-  const mobiledoc_updated = JSON.parse(req.body.page.current.mobiledoc);
-
-
-
-
-  async function addWatermarkToImage(imageUrl) {
-    const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
-    const imageBuffer = Buffer.from(response.data, "binary");
-    const imageFolderPath = "./public";
-    const imageFilename = `image_${Date.now()}.png`;
-    const svgPath = path.join(imageFolderPath, "image.png");
-    const pngPath = path.join(imageFolderPath, imageFilename);
-
-    if (fs.existsSync(svgPath)) {
-      fs.unlinkSync(svgPath);
+    function deleteFile(path) {
+      fs.unlink(path, (err) => {
+        if (err) {
+          if (err.code === 'ENOENT') {
+            console.log(`File '${path}' not found.`);
+          } else {
+            console.log(`An error occurred while deleting file '${path}': ${err.message}`);
+          }
+        } else {
+          console.log(`File '${path}' deleted successfully.`);
+        }
+      });
     }
 
-    const textWatermark = "Watermark";
-    const watermarkColor = "rgba(255, 255, 255, 0.5)";
 
-    const image = await sharp(imageBuffer);
-    const metadata = await image.metadata();
-    const watermarkWidth = metadata.width;
-    const watermarkHeight = metadata.height;
 
-    const watermarkSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${watermarkWidth}" height="${watermarkHeight}">
-                            <text x="${watermarkWidth / 2}" y="${watermarkHeight / 2
-      }" font-size="24" fill="${watermarkColor}" text-anchor="middle" alignment-baseline="middle">${textWatermark}</text>
-                          </svg>`;
+    if (req.body.page != undefined) {
+      const postId = req.body.page.current.id;
+      obj.id = postId;
+      let updatedData = req.body;
 
-    const watermark = await sharp(Buffer.from(watermarkSvg)).png().toBuffer();
 
-    let filePath = "";
+      let imageUrl2;
+      const updatedCards = [];
+      const updatedCards_define = [];
+      const updatedCards_index = [];
+      const updatedCards_gallery_index = [];
+      let isFetchingComplete = false;
+      let mobiledoc;
+      let currentDate = req.body.page.current.updated_at;
+      let currentTitle = req.body.page.current.title;
+      if (req.body.page.current.mobiledoc) {
+        mobiledoc = JSON.parse(req.body.page.current.mobiledoc);
 
-    filePath = path.join(imageFolderPath, `watermarked_${Date.now()}.png`);
-    await image.composite([{ input: watermark }]).toFile(filePath);
-    const ReplaceStatussave = new ReplaceStatus({
-      id: postId,
-      feature_imageold: imageUrl,
-      feature_image: `https://oemdieselparts.com/pic/${filePath.split("/")[1]}`,
-      hasWatermark: true,
-      DocumentType: "page",
-    });
-    await ReplaceStatussave.save();
-    return filePath;
-  }
-  const watermarkPromises = [];
+        let cards = mobiledoc.cards;
 
-  for (let i = 0; i < updatedCards.length; i++) {
-    const mongoID = await ReplaceStatus.findOne({
-      $or: [
-        { feature_imageold: updatedCards[i] },
-        { feature_image: updatedCards[i] },
-      ],
-    });
-    if (!mongoID) {
-      const watermarkPromise = addWatermarkToImage(updatedCards[i])
-        .then((watermarkedImagePath) => {
-
-          currentDate = req.body.page.current.updated_at;
-          currentTitle = req.body.page.current.title;
-
-          if (updatedCards_define[i] === 'Feature') {
-            console.log("Feature work");
-            featureImage = `https://oemdieselparts.com/pic/${watermarkedImagePath.split("/")[1]}`;
-          } else {
-            if (req.body.page.current.mobiledoc) {
-              const cards = mobiledoc_updated.cards;
-
-              if (cards) {
-                for (const [index, card] of cards.entries()) {
-                  if (card[0] === 'image' && card[1].src === updatedCards[i]) {
-                    mobiledoc_updated.cards[index][1].src = `https://oemdieselparts.com/pic/${watermarkedImagePath.split("/")[1]}`;
-                  }
+        if (cards) {
+          let count_image = 0
+          let count_gallery = 0
+          let count_card_image = 0
+          for (const card of mobiledoc.cards) {
+            if (card[0] === "image") {
+              const imageUrl = card[1].src;
+              updatedCards.push(imageUrl);
+              updatedCards_define.push("Card");
+              updatedCards_index.push(count_card_image++);
+              updatedCards_gallery_index.push(count_gallery++);
+            } else {
+              if (card[0] === "gallery") {
+                const images1 = card[1].images;
+                let count_gallery_image = 0
+                let temp_count = count_gallery++
+                for (const image of images1) {
+                  const imageUrl = image.src;
+                  updatedCards.push(imageUrl);
+                  updatedCards_define.push("gallery");
+                  updatedCards_index.push(count_gallery_image++);
+                  updatedCards_gallery_index.push(temp_count);
                 }
-                // }
               }
             }
           }
+        }
 
-        })
-        .catch((error) => {
-          console.error("Error adding watermark to image:", error);
-        });
-      watermarkPromises.push(watermarkPromise);
+        updatedCards.push(req.body.page.current.feature_image);
+        updatedCards_define.push("Feature");
+        let currentDate;
+        let currentTitle;
+        let payload;
+        let featureImage = '';
+        const mobiledoc_updated = JSON.parse(req.body.page.current.mobiledoc);
+
+
+        const watermarkchange = await watermark.findOne({ "id": "648ab1684855601a64bcdf5d" });
+
+
+        async function addWatermarkToImage(imageUrl, mongoreplace, oldwatermark_img = null) {
+
+          const response = await axios.get(imageUrl, { responseType: "arraybuffer" });
+          const imageBuffer = Buffer.from(response.data, "binary");
+          const imageFolderPath = "./public";
+          const imageFilename = `image_${Date.now()}.png`;
+          const svgPath = path.join(imageFolderPath, "image.png");
+          const pngPath = path.join(imageFolderPath, imageFilename);
+
+          if (fs.existsSync(svgPath)) {
+            fs.unlinkSync(svgPath);
+          }
+
+          const textWatermark = watermarkchange.watermark;
+          const watermarkColor = "rgba(255, 255, 255, 0.5)";
+
+          const image = await sharp(imageBuffer);
+          const metadata = await image.metadata();
+          const watermarkWidth = metadata.width;
+          const watermarkHeight = metadata.height;
+          let watermarkSvg;
+          if (watermarkchange.style == 'Center') {
+            // console.log("test1");
+            watermarkSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${watermarkWidth}" height="${watermarkHeight}">
+					<text x="${watermarkWidth / 2}" y="${watermarkHeight / 2}" font-size="24" fill="${watermarkColor}" text-anchor="middle" alignment-baseline="middle">${textWatermark}</text>
+				  </svg>`;
+          } else if (watermarkchange.style == 'Left') {
+            watermarkSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${watermarkWidth}" height="${watermarkHeight}">
+					<text x="${watermarkWidth / 4}" y="${watermarkHeight / 9}" font-size="24" fill="${watermarkColor}" text-anchor="middle" alignment-baseline="middle">${textWatermark}</text>
+				  </svg>`;
+          } else if (watermarkchange.style == 'Right') {
+            watermarkSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${watermarkWidth}" height="${watermarkHeight}">
+					<text x="${watermarkWidth / 1.3}" y="${watermarkHeight / 9}" font-size="24" fill="${watermarkColor}" text-anchor="middle" alignment-baseline="middle">${textWatermark}</text>
+				  </svg>`;
+          } else if (watermarkchange.style == 'BottomLeft') {
+            watermarkSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${watermarkWidth}" height="${watermarkHeight}">
+					<text x="${watermarkWidth / 4}" y="${watermarkHeight / 1.1}" font-size="24" fill="${watermarkColor}" text-anchor="middle" alignment-baseline="middle">${textWatermark}</text>
+				  </svg>`;
+          } else if (watermarkchange.style == 'BottomRight') {
+            watermarkSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${watermarkWidth}" height="${watermarkHeight}">
+					<text x="${watermarkWidth / 1.3}" y="${watermarkHeight / 1.1}" font-size="24" fill="${watermarkColor}" text-anchor="middle" alignment-baseline="middle">${textWatermark}</text>
+				  </svg>`;
+          }
+          const watermark = await sharp(Buffer.from(watermarkSvg)).png().toBuffer();
+
+          let filePath = "";
+          let filePath1 = "";
+          let filePath2 = "";
+          let filePath3 = "";
+          let filePath4 = "";
+
+          let date = Date.now();
+          const subDirectory1 = `watermarked_${date}.jpegcontent/images/size`; // Specify the subdirectory you want to create
+          const subDirectoryPath1 = path.join(imageFolderPath, subDirectory1);
+          await fs.promises.mkdir(subDirectoryPath1, { recursive: true });
+
+
+          filePath = path.join(imageFolderPath, `watermarked_${date}.jpeg`);
+          filePath1 = path.join(subDirectoryPath1, `w300`);
+          filePath2 = path.join(subDirectoryPath1, `w600`);
+          filePath3 = path.join(subDirectoryPath1, `w1000`);
+          filePath4 = path.join(subDirectoryPath1, `w2000`);
+
+          await image.composite([{ input: watermark }]).jpeg({ quality: 80 }).toFile(filePath, { compressionLevel: 1 });;
+          await image.composite([{ input: watermark }]).toFile(filePath1);
+          await image.composite([{ input: watermark }]).toFile(filePath2);
+          await image.composite([{ input: watermark }]).toFile(filePath3);
+          await image.composite([{ input: watermark }]).toFile(filePath4);
+
+          if (mongoreplace == true) {
+            const pathArray = oldwatermark_img.split("/");
+            const deleteimg_name = pathArray[pathArray.length - 1];
+
+            // Example usage:
+            const delete_directoryPath = './public/' + deleteimg_name + 'content';
+            deleteDirectory(delete_directoryPath);
+
+            const delete_filePath = './public/' + deleteimg_name;
+            deleteFile(delete_filePath);
+
+            const change = await ReplaceStatus.findOne({
+              $or: [
+                { feature_imageold: imageUrl }
+              ],
+            });
+            // const change = await ReplaceStatus.findOne({ id: postId });
+            change.feature_image = `https://oemdieselparts.com/pic/${path.basename(filePath)}`;
+            change.Watermark = watermarkchange.watermark;
+            await change.save();
+            return filePath;
+          } else {
+            const ReplaceStatussave = new ReplaceStatus({
+              id: postId,
+              feature_imageold: imageUrl,
+              feature_image: `https://oemdieselparts.com/pic/${path.basename(filePath)}`,
+              hasWatermark: true,
+              Watermark: watermarkchange.watermark,
+              DocumentType: "page",
+            });
+            await ReplaceStatussave.save();
+            return filePath;
+          }
+        }
+
+        const watermarkPromises = [];
+
+        let mongoID;
+        let mongoID1;
+        for (let i = 0; i < updatedCards.length; i++) {
+          const mongoID1 = await ReplaceStatus.findOne({
+            $or: [
+              { feature_image: updatedCards[i] }
+            ],
+          });
+          const mongoID = await ReplaceStatus.findOne({
+            $or: [
+              { feature_imageold: updatedCards[i] },
+              { feature_image: updatedCards[i] },
+            ],
+          });
+
+          if (!mongoID1) {
+            console.log("tessst1");
+            console.log(updatedCards[i]);
+            if (updatedCards[i] != null) {
+              const watermarkPromise = addWatermarkToImage(updatedCards[i], false)
+                .then((watermarkedImagePath) => {
+
+                  currentDate = req.body.page.current.updated_at;
+                  currentTitle = req.body.page.current.title;
+
+                  if (updatedCards_define[i] === 'Feature') {
+                    featureImage = `https://oemdieselparts.com/pic/${watermarkedImagePath.split("/")[1]}`;
+                  } else if (updatedCards_define[i] === 'Card') {
+                    const cards = mobiledoc_updated.cards;
+                    if (cards) {
+                      for (const [index, card] of cards.entries()) {
+                        if (card[0] === 'image' && card[1].src === updatedCards[i]) {
+                          mobiledoc_updated.cards[updatedCards_gallery_index[i]][1].src = `https://oemdieselparts.com/pic/${watermarkedImagePath.split("/")[1]}`;
+                        }
+                      }
+                    }
+                  } else {
+                    if (req.body.page.current.mobiledoc) {
+                      const cards = mobiledoc_updated.cards;
+                      if (cards) {
+                        for (const [index, card] of cards.entries()) {
+                          mobiledoc_updated.cards[updatedCards_gallery_index[i]][1].images[updatedCards_index[i]].src = `https://oemdieselparts.com/pic/${watermarkedImagePath.split("/")[1]}`;
+                        }
+                      }
+                    }
+                  }
+
+                })
+                .catch((error) => {
+                  console.error("Error adding watermark to image:", error);
+                });
+              watermarkPromises.push(watermarkPromise);
+            }
+          } else if (mongoID1 && watermarkchange.watermark !== mongoID1.Watermark) {
+            console.log("tessst2");
+            console.log(mongoID1.feature_imageold);
+            const watermarkPromise = addWatermarkToImage(mongoID1.feature_imageold, true, updatedCards[i])
+              .then((watermarkedImagePath) => {
+
+                const watermarkedImagePath_pathArray = watermarkedImagePath.split("/");
+                const watermarkedImagePath_final = watermarkedImagePath_pathArray[watermarkedImagePath_pathArray.length - 1];
+
+                currentDate = req.body.page.current.updated_at;
+                currentTitle = req.body.page.current.title;
+
+                if (updatedCards_define[i] === 'Feature') {
+                  featureImage = `https://oemdieselparts.com/pic/${watermarkedImagePath_final}`;
+                } else if (updatedCards_define[i] === 'Card') {
+                  const cards = mobiledoc_updated.cards;
+                  if (cards) {
+                    for (const [index, card] of cards.entries()) {
+                      if (card[0] === 'image' && card[1].src === updatedCards[i]) {
+                        mobiledoc_updated.cards[updatedCards_gallery_index[i]][1].src = `https://oemdieselparts.com/pic/${watermarkedImagePath_final}`;
+                      }
+                    }
+                  }
+                } else {
+                  if (req.body.page.current.mobiledoc) {
+                    const cards = mobiledoc_updated.cards;
+                    if (cards) {
+                      for (const [index, card] of cards.entries()) {
+                        mobiledoc_updated.cards[updatedCards_gallery_index[i]][1].images[updatedCards_index[i]].src = `https://oemdieselparts.com/pic/${watermarkedImagePath_final}`;
+                      }
+                    }
+                  }
+                }
+
+              })
+              .catch((error) => {
+                console.error("Error adding watermark to image:");
+              });
+            watermarkPromises.push(watermarkPromise);
+          } else if (mongoID && watermarkchange.watermark !== mongoID.Watermark) {
+            console.log("tessst3");
+            console.log(mongoID.feature_imageold);
+            const watermarkPromise = addWatermarkToImage(mongoID.feature_imageold, true, updatedCards[i])
+              .then((watermarkedImagePath) => {
+
+                const watermarkedImagePath_pathArray = watermarkedImagePath.split("/");
+                const watermarkedImagePath_final = watermarkedImagePath_pathArray[watermarkedImagePath_pathArray.length - 1];
+
+                currentDate = req.body.page.current.updated_at;
+                currentTitle = req.body.page.current.title;
+
+                if (updatedCards_define[i] === 'Feature') {
+                  featureImage = `https://oemdieselparts.com/pic/${watermarkedImagePath_final}`;
+                } else if (updatedCards_define[i] === 'Card') {
+                  const cards = mobiledoc_updated.cards;
+                  if (cards) {
+                    for (const [index, card] of cards.entries()) {
+                      if (card[0] === 'image' && card[1].src === updatedCards[i]) {
+                        mobiledoc_updated.cards[updatedCards_gallery_index[i]][1].src = `https://oemdieselparts.com/pic/${watermarkedImagePath_final}`;
+                      }
+                    }
+                  }
+                } else {
+                  if (req.body.page.current.mobiledoc) {
+                    const cards = mobiledoc_updated.cards;
+                    if (cards) {
+                      for (const [index, card] of cards.entries()) {
+                        mobiledoc_updated.cards[updatedCards_gallery_index[i]][1].images[updatedCards_index[i]].src = `https://oemdieselparts.com/pic/${watermarkedImagePath_final}`;
+                      }
+                    }
+                  }
+                }
+
+              })
+              .catch((error) => {
+                console.error("Error adding watermark to image:");
+              });
+            watermarkPromises.push(watermarkPromise);
+          }
+
+        }
+
+        if (watermarkPromises.length > 0) {
+          Promise.all(watermarkPromises)
+            .then(() => {
+              const url = `https://oemdieselparts.com/ghost/api/admin/pages/${postId}`;
+              const headers = {
+                Authorization: `Ghost ${token}`,
+              };
+              currentDate = req.body.page.current.updated_at;
+              currentTitle = req.body.page.current.title;
+              if (featureImage != '') {
+                payload = {
+                  pages: [
+                    {
+                      id: `${postId}`,
+                      updated_at: currentDate,
+                      title: currentTitle,
+                      feature_image: featureImage,
+                      mobiledoc: JSON.stringify(mobiledoc_updated)
+                    }
+                  ]
+                };
+              } else {
+                payload = {
+                  pages: [
+                    {
+                      id: `${postId}`,
+                      updated_at: currentDate,
+                      title: currentTitle,
+                      mobiledoc: JSON.stringify(mobiledoc_updated)
+                    }
+                  ]
+                };
+              }
+              console.log(req.body.page.current.id)
+              if (payload != '' && typeof payload !== 'undefined') {
+                const checkFields = async () => {
+                  try {
+                    const response = await axios.put(url, payload, { headers });
+                    console.log('Feature SUCCESS');
+                    return
+                  } catch (error) {
+                    console.error('ERR', error);
+                    isFetchingComplete = true;
+                  }
+                };
+                checkFields();
+              }
+            })
+            .catch((error) => {
+              console.error("Error adding watermark to images:");
+            });
+        }
+      };
     }
+    if (!req.generate) {
+      console.log("Page Update webhook hit");
+      res.status(200).json({ message: "Webhook request received and processed successfully." });
+    }
+  } catch (error) {
+    // Handle any errors that occurred during webhook processing
+    console.error(error);
+
+    // Send an error response
+    res.status(500).json({ message: "An error occurred while processing the webhook." });
   }
 
-  const url = `https://oemdieselparts.com/ghost/api/admin/pages/${postId}`;
-  const headers = {
-    Authorization: `Ghost ${token}`,
-  };
 
-  Promise.all(watermarkPromises)
-    .then(() => {
-      if (currentDate != '' && currentTitle != '' && typeof currentDate !== 'undefined' && typeof currentTitle !== 'undefined') {
-        if (featureImage != '' && currentDate != '' && currentTitle != '' && typeof currentDate !== 'undefined' && typeof currentTitle !== 'undefined') {
-          payload = {
-            pages: [
-              {
-                id: `${postId}`,
-                updated_at: currentDate,
-                title: currentTitle,
-                feature_image: featureImage,
-                mobiledoc: JSON.stringify(mobiledoc_updated)
-              }
-            ]
-          };
-        } else {
-          payload = {
-            pages: [
-              {
-                id: `${postId}`,
-                updated_at: currentDate,
-                title: currentTitle,
-                mobiledoc: JSON.stringify(mobiledoc_updated)
-              }
-            ]
-          };
-        }
-      }
-
-      if (payload != '' && typeof payload !== 'undefined') {
-        console.log(payload);
-        const checkFields = async () => {
-          try {
-            const response = await axios.put(url, payload, { headers });
-            console.log(response.data, 'Feature SUCCESS');
-          } catch (error) {
-            console.error(error.response.data.errors, 'ERR');
-          }
-        };
-        checkFields();
-      }
-    })
-    .catch((error) => {
-      console.error("Error adding watermark to images:", error);
-    });
-
-
-
-
-  // const postId = req.body.page.current.id;
-  // let updatedData = req.body;
-
-  // let imageUrl2;
-  // if (req.body.page.current.mobiledoc) {
-  //   const mobiledoc = JSON.parse(req.body.page.current.mobiledoc);
-  //   const cards = mobiledoc.cards;
-  //   if (cards) {
-  //     imageUrl2 = cards[0] && cards[0][1] && cards[0][1]?.src && cards[0][1]?.src;
-  //   }
-  // }
-  // const mongoID = await ReplaceStatus.findOne({ 'id': postId });
-  // // console.log(mongoID, postId, "mongoIDmongoIDmongoID");
-  // // console.log(req.body.page.current.updated_at, "req.body.page.current.updated_at");
-
-  // let update_at12;
-  // let mongoIDimg1;
-  // let mongoIDimg2;
-  // if (mongoID) {
-  //   let { updatedAt, imageUrl, cardsimage } = mongoID;
-  //   // console.log(updatedAt, "saad123456");
-  //   update_at12 = updatedAt;
-  //   mongoIDimg1 = imageUrl;
-  //   mongoIDimg2 = cardsimage;
-  // }
-  // console.log(req.body.page.current.feature_image, "sfd", mongoIDimg1);
-  // if (mongoIDimg1 === req.body.page.current.feature_image || update_at12 == req.body.page.current.updated_at) {
-  //   res.status(400).json({ message: 'Update already in progress' });
-  //   console.log('already');
-  //   return;
-  // }
-  // try {
-  //   const page = await Page.findOneAndUpdate(
-  //     { 'page.current.id': postId },
-  //     {
-  //       $set: {
-  //         'page.current.title': updatedData.page.current.title,
-  //         'page.current.excerpt': updatedData.page.current.excerpt,
-  //         'page.current.html': updatedData.page.current.html,
-  //         'page.current.feature_image': updatedData.page.current.feature_image,
-  //       },
-  //     },
-  //     { new: true }
-  //   );
-
-  //   const imageUrl = updatedData.page.current.feature_image;
-
-  //   if (obj.id !== postId) {
-  //     const ImagemainSave = new Imagemain({ ...imageUrl });
-  //     await ImagemainSave.save();
-  //   }
-
-  //   if (update_at12 !== req.body.page.current.updated_at || !image55) {
-  //     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
-  //     const imageBuffer = Buffer.from(response.data, 'binary');
-  //     const imageFolderPath = './public';
-  //     const imageFilename = `image_${Date.now()}.png`;
-  //     const svgPath = path.join(imageFolderPath, 'image.png');
-  //     var pngPath = path.join(imageFolderPath, imageFilename);
-
-  //     if (fs.existsSync(svgPath)) {
-  //       fs.unlinkSync(svgPath);
-  //     }
-
-  //     const textWatermark = 'Watermark';
-  //     const watermarkColor = 'rgba(255, 255, 255, 0.5)';
-
-  //     const image = await sharp(imageBuffer);
-  //     const metadata = await image.metadata();
-  //     const watermarkWidth = metadata.width;
-  //     const watermarkHeight = metadata.height;
-
-  //     const watermarkSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${watermarkWidth}" height="${watermarkHeight}">
-  //                           <text x="${watermarkWidth / 2}" y="${watermarkHeight / 2}" font-size="24" fill="${watermarkColor}" text-anchor="middle" alignment-baseline="middle">${textWatermark}</text>
-  //                         </svg>`;
-
-  //     const watermark = await sharp(Buffer.from(watermarkSvg))
-  //       .png()
-  //       .toBuffer();
-  //     let filePath = '';
-
-  //     if (isFunctionRunning <= 1) {
-  //       filePath = path.join(imageFolderPath, `watermarked_${Date.now()}.png`);
-  //       await image.composite([{ input: watermark }])
-  //         .toFile(filePath);
-  //     }
-
-  //     imagePath = filePath;
-  //     image55 = filePath;
-  //   }
-  //   if (!imageUrl2) {
-  //     console.log("hello");
-  //   }
-
-  //   if (!image56 && imageUrl2 || imageUrl2 && updated_at !== req.body.page.current.updated_at) {
-  //     const response1 = await axios.get(imageUrl2, { responseType: 'arraybuffer' });
-  //     const imageBuffer1 = Buffer.from(response1.data, 'binary');
-  //     const imageFolderPath1 = './public';
-  //     const imageFilename1 = `image_${Date.now()}.png`;
-  //     const svgPath1 = path.join(imageFolderPath1, 'image.png');
-  //     var pngPath1 = path.join(imageFolderPath1, imageFilename1);
-
-  //     if (fs.existsSync(svgPath1)) {
-  //       fs.unlinkSync(svgPath1);
-  //     }
-
-  //     const textWatermark1 = 'Watermark';
-  //     const watermarkColor1 = 'rgba(255, 255, 255, 0.5)';
-
-  //     const image1 = await sharp(imageBuffer1);
-  //     const metadata1 = await image1.metadata();
-  //     const watermarkWidth1 = metadata1.width;
-  //     const watermarkHeight1 = metadata1.height;
-
-  //     const watermarkSvg1 = `<svg xmlns="http://www.w3.org/2000/svg" width="${watermarkWidth1}" height="${watermarkHeight1}">
-  //                             <text x="${watermarkWidth1 / 2}" y="${watermarkHeight1 / 2}" font-size="24" fill="${watermarkColor1}" text-anchor="middle" alignment-baseline="middle">${textWatermark1}</text>
-  //                           </svg>`;
-
-  //     const watermark1 = await sharp(Buffer.from(watermarkSvg1))
-  //       .png()
-  //       .toBuffer();
-  //     let filePath1 = '';
-
-  //     if (isFunctionRunning <= 1) {
-  //       filePath1 = path.join(imageFolderPath1, `watermarked_${Date.now()}.png`);
-  //       await image1.composite([{ input: watermark1 }])
-  //         .toFile(filePath1);
-  //     }
-
-  //     imagePath1 = filePath1;
-  //     image56 = filePath1;
-  //   }
-
-  //   updated_at = req.body.page.current.updated_at;
-  //   // console.log(imageUrl2, "imageUrl2imageUrl2");
-
-  //   // await Page.findOneAndUpdate(
-  //   //   { 'page.current.id': postId },
-  //   //   { $set: { 'page.current.feature_image': imagePath } },
-  //   //   { new: true }
-  //   // );
-  //   // console.log(imagePath1, "imagePath1imagePath1imagePath1imagePath1");
-  //   let currentDate;
-  //   let currentTitle;
-  //   let imagesplit = await imagePath.split("/")[1];
-  //   let imagesplit1 = await imagePath1?.split("/")[1];
-
-  //   // console.log(imagesplit, "imagesplit");
-
-  //   const url = `https://oemdieselparts.com/ghost/api/admin/pages/${postId}`;
-  //   const headers = {
-  //     Authorization: `Ghost ${token}`,
-  //   };
-  //   const url1 = 'http://oemdieselparts.com/ghost/api/v3/content/pages/?key=62ba5f4d0ae64abf8445ee2054';
-
-  //   await axios.get(url1)
-  //     .then(response => {
-  //       if (response.data.pages[0]) {
-  //         for (let i = 0; i < 3; i++) {
-  //           console.log(response.data.pages[i]);
-  //         }
-  //         response.data.pages.map((v, i) => {
-  //           console.log(v.id, "id");
-  //           if (v.id === `${postId}`) {
-  //             currentDate = v.updated_at;
-  //             currentTitle = v.title;
-  //             console.log(currentDate, "saad");
-  //           }
-  //         })
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.error(error);
-  //     });
-
-  //   // console.log(currentDate, currentTitle, postId, imagesplit, "postId");
-  //   let data = {
-  //     "version": "0.3.1",
-  //     "atoms": [],
-  //     "cards": [
-  //       [
-  //         "image",
-  //         {
-  //           "src": `https://oemdieselparts.com/pic/${imagesplit1}`,
-  //           "width": 275,
-  //           "height": 183
-  //         }
-  //       ]
-  //     ],
-  //     "markups": [],
-  //     "sections": [
-  //       [10, 0],
-  //       [1, "p", []]
-  //     ],
-  //     "ghostVersion": "4.0"
-  //   }
-  //   // const parsedObject = JSON.parse(data);
-  //   let payload;
-  //   if (imageUrl2) {
-  //     payload = {
-  //       pages: [
-  //         {
-  //           id: `${postId}`,
-  //           updated_at: currentDate,
-  //           title: currentTitle,
-  //           feature_image: `https://oemdieselparts.com/pic/${imagesplit}`,
-  //           mobiledoc: JSON.stringify(data)
-  //         }
-  //       ]
-  //     };
-  //   } else {
-  //     payload = {
-  //       pages: [
-  //         {
-  //           id: `${postId}`,
-  //           updated_at: currentDate,
-  //           title: currentTitle,
-  //           feature_image: `https://oemdieselparts.com/pic/${imagesplit}`,
-  //         }
-  //       ]
-  //     };
-  //   }
-
-
-  //   const checkFields = async () => {
-  //     if (currentDate && imagesplit && imageUrl2) {
-  //       if (mongoID && update_at12 !== req.body.page.current.updated_at) {
-  //         await axios.put(url, payload, { headers })
-  //           .then(response => console.log(response.data, 'SUCCESS'))
-  //           .catch(error => console.error(error.response.data.errors[0].details, 'ERR'));
-  //         console.log("sahi h");
-  //         await ReplaceStatus.findOneAndUpdate(
-  //           { 'id': postId },
-  //           {
-  //             $set: {
-  //               oldImageUrl: imageUrl,
-  //               imageUrl: `https://oemdieselparts.com/pic/${imagesplit}`,
-  //               hasWatermark: true,
-  //               cardsimageold: imageUrl2,
-  //               cardsimage: `https://oemdieselparts.com/pic/${imagesplit}`
-  //             }
-  //           }
-  //         );
-  //       } else {
-
-  //         await axios.put(url, payload, { headers })
-  //           .then(response => console.log(response.data, 'SUCCESS'))
-  //           .catch(error => console.error(error.response.data.errors[0].details, 'ERR'));
-  //         const ReplaceStatussave = new ReplaceStatus({ id: postId, oldImageUrl: imageUrl, imageUrl: `https://oemdieselparts.com/pic/${imagesplit}`, hasWatermark: true, cardsimageold: imageUrl2, cardsimage: `https://oemdieselparts.com/pic/${imagesplit}`, DocumentType: "page" })
-  //         await ReplaceStatussave.save()
-
-  //         console.log("hello");
-  //       }
-  //     } else {
-  //       await axios.put(url, payload, { headers })
-  //         .then(response => console.log(response.data, 'SUCCESS'))
-  //         .catch(error => console.error(error.response.data.errors[0].details, 'ERR'));
-  //       console.log("sahi h");
-  //       await ReplaceStatus.findOneAndUpdate(
-  //         { 'id': postId },
-  //         {
-  //           $set: {
-  //             oldImageUrl: imageUrl,
-  //             imageUrl: `https://oemdieselparts.com/pic/${imagesplit}`,
-  //             hasWatermark: true,
-  //             DocumentType: "page"
-  //           }
-  //         }
-  //       );
-  //       console.log("nhi");
-  //     }
-
-  //   };
-
-  //   checkFields();
-
-  //   res.status(200).json({ message: 'Post updated successfully', imagePath });
-  //   if (fs.existsSync(pngPath)) {
-  //     fs.unlinkSync(pngPath);
-  //   }
-  // } catch (error) {
-  //   console.error(error);
-  //   isFunctionRunning = 0;
-  //   res.status(500).json({ message: "Internal server error" });
-  // }
 };
 

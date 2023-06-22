@@ -21,12 +21,12 @@ export const nodemailer1 = async (req, res) => {
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'saadirfan465@gmail.com',
+            user: 'admin@oemdieselparts.com',
             pass: 'ggdkqhgufudcgkpm'
         }
     });
     let info = await transporter.sendMail({
-        from: '"Password 👻" <saadirfan465@gmail.com>', // sender address
+        from: '"Password 👻" <admin@oemdieselparts.com>', // sender address
         to: "anasirfa577@gmail.com", // list of receivers
         subject: "Hello ✔", // Subject line
         text: "ye ap ka password hai", // plain text body

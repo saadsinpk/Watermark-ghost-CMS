@@ -89,13 +89,13 @@ memberSchema.pre('save', function (next) {
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: 'saadirfan465@gmail.com',
+          user: 'admin@oemdieselparts.com',
           pass: 'ggdkqhgufudcgkpm',
         },
       });
   
       const info = await transporter.sendMail({
-        from: '"Password 👻" <saadirfan465@gmail.com>',
+        from: '"Password 👻" <admin@oemdieselparts.com>',
         to: email,
         subject: 'Password Reset',
         text: `Your new password: ${password}`,

@@ -8,6 +8,22 @@ const imageSchemawa = new mongoose.Schema({
     watermark: {
         type: String,
     },
+    style: {
+        type: String,
+    },
+    watermarktype: {
+        type: String,
+    },
+    imagewatermark: {
+        type: String,
+    },
+    deg: {
+        type: String,
+    },
+    imagestyle: {
+        type: String,
+    }
+
 }, { timestamps: true });
 
 const watermark = mongoose.model('watermark', imageSchemawa);
