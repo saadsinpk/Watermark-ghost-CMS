@@ -63,13 +63,6 @@
                    
                   />
   
-                  <button
-                    id="ember4"
-                    class="forgotten-link gh-btn-link gh-btn-icon ember-view"
-                    type="button"
-                  >
-                    <span>Forgot?</span>
-                  </button>
                 </span>
               </div>
   
@@ -120,6 +113,7 @@
     if (data.user.member) {
       console.log('Login successful');
       localStorage.setItem('access_token', data.token);
+      localStorage.setItem('access_token_email', data.user.member.current.email);
       window.location.href = 'watermark.html';
     } else {
       console.log('Login failed:', data.message);

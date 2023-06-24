@@ -82,7 +82,6 @@
                 </div>
               </div>
             </div>
-            <div class="bottomImg"><img src="./main2.png" alt="img" /></div>
           </div>
           <div class="col-lg-6 col-md-12">
             <div class="wrapper">
@@ -392,42 +391,6 @@
                         </button>
                       </div>
                     </div>
-                    <!-- <p
-                      class="text-2xs text-typo-secondary text-center sm:!text-left !mt-4"
-                      style="
-                        font-size: 0.625rem;
-                        line-height: 1rem;
-                        color: #67727c;
-                        text-align: left !important;
-                      "
-                    >
-                      By uploading an image or URL you agree to our
-                      <a
-                        target="_blank"
-                        class="text-typo-secondary underline"
-                        draggable="false"
-                        href="/tos"
-                        >Terms of Service</a
-                      >. This site is protected by hCaptcha and its
-                      <a
-                        target="_blank"
-                        rel="noopener"
-                        class="text-typo-secondary underline"
-                        draggable="false"
-                        href="https://hcaptcha.com/privacy"
-                        >Privacy Policy</a
-                      >
-                      and
-                      <a
-                        target="_blank"
-                        rel="noopener"
-                        class="text-typo-secondary underline"
-                        draggable="false"
-                        href="https://hcaptcha.com/terms"
-                        >Terms of Service</a
-                      >
-                      apply.
-                    </p> -->
                   </div>
                   <div>
                     <label for="vol"
@@ -566,12 +529,6 @@
             </div>
           </div>
         </div>
-        <!-- <div style="display: flex; justify-content: center">
-          <div id="filewrapper">
-            <h3 class="uploaded">History</h3>
-            <div class="showfilebox" id="showfilebox"></div>
-          </div>
-        </div> -->
 
         <div class="section2 y-12 md:py-24">
           <div class="sec1">
@@ -698,37 +655,6 @@
           }
         });
 
-      handleUpdate();
-      function handleUpdate() {
-        fetch("https://oemdieselparts.com/pic/api/get/images")
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Failed to fetch images");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            const images = data.images;
-            const showfilebox = document.getElementById("showfilebox");
-            let Image12 = [];
-            Image12.push(...images);
-
-            if (Array.isArray(Image12)) {
-              showfilebox.innerHTML = "";
-              Image12.forEach((image, index) => {
-                const imgElement = document.createElement("img");
-                imgElement.src = image;
-                imgElement.alt = "img";
-
-                showfilebox.innerHTML += `<img src="${image}" />`;
-              });
-            }
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
-
       function uploadImage(event) {
         event.preventDefault();
         const fileInput = document.getElementById("upload");
@@ -763,7 +689,6 @@
                 close: true, // Show a close button
                 gravity: "top", // Position of the toast message (top, bottom, left, right)
               }).showToast();
-              handleUpdate();
             })
             .catch((error) => {
               console.error(error);
@@ -819,47 +744,12 @@
           console.error(error);
         }
       };
-      // const Left = () => {
-      //   style1 = "top-left";
-      //   console.log(style1, "style1");
-      // };
-      // const Right = () => {
-      //   style1 = "top-Right";
-      //   console.log(style1, "style1");
-      // };
-      // const BottomLeft = () => {
-      //   style1 = "BottomLeft";
-      //   console.log(style1, "style1");
-      // };
-      // const BottomRight = () => {
-      //   style1 = "BottomRight";
-      //   console.log(style1, "style1");
-      // };
-
       const access_token = localStorage.getItem("access_token");
       // Assuming you have stored the token in a variable called 'token'
       const headers = {
         Authorization: `Bearer ${access_token}`,
       };
 
-      // Make an HTTP request with the token included in the headers
-      fetch("https://oemdieselparts.com/pic/protected-endpoint", {
-        method: "GET",
-        headers: headers,
-      })
-        .then((response) => {
-          if (response.ok) {
-            // Handle the successful response from the server
-          } else if (response.status === 401) {
-            // Handle unauthorized error
-            // Redirect the user to the login page
-            window.location.href = "https://oemdieselparts.com/pic/";
-            console.log(response, "res");
-          }
-        })
-        .catch((error) => {
-          // Handle any errors
-        });
       if (!access_token) {
         window.location.href = "https://oemdieselparts.com/pic/";
       }
@@ -869,8 +759,6 @@
         var progressBar = document.getElementById("progress-bar");
         var button = document.getElementById("buttonmain12");
         button.disabled = true;
-        // Starting width
-        // console.log(pagination);
         var interval = setInterval(increaseWidth, 1000); // Increase width every 100 milliseconds
 
         function increaseWidth() {
@@ -886,61 +774,58 @@
       }
 
       async function main12() {
-        const email = prompt("Enter your email");
-        console.log(email);
-        if (email) {
-          try {
-            width = 0;
-            document.getElementById("progress").classList.add("active");
-            runProgress();
-            const response1 = await axios.get(
-              "https://oemdieselparts.com/ghost/api/content/posts/?key=62ba5f4d0ae64abf8445ee2054"
-            );
-            const data = new FormData();
-            data.append("email", email);
-            const meta = response1.data.meta.pagination.total;
+        try {
+          width = 0;
+          document.getElementById("progress").classList.add("active");
+          runProgress();
+          const response1 = await axios.get(
+            "https://oemdieselparts.com/ghost/api/content/posts/?key=62ba5f4d0ae64abf8445ee2054"
+          );
+          const data = new FormData();
+          const meta = response1.data.meta.pagination.total;
 
-            console.log(meta);
-            pagination = meta;
-            const response2 = await axios.post(
-              "https://oemdieselparts.com/pic/api/all/Alldata",
-              data,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
-            const responseData = response2.data;
-            console.log(responseData, "res");
-            if (responseData === "complete") {
-              var progressBar = document.getElementById("progress-bar");
-              function runProgress1() {
-                // var progressBar = document.getElementById("progress-bar");
-                // console.log(pagination);
-                var interval = setInterval(increaseWidth, 100); // Increase width every 100 milliseconds
+          const access_token_email = localStorage.getItem("access_token_email");
+          data.append("email", access_token_email);
+          data.append("pag_limit", meta);
 
-                function increaseWidth() {
-                  if (width >= 100) {
-                    clearInterval(interval); // Stop the interval when width reaches 50
-                    document
-                      .getElementById("progress")
-                      .classList.remove("active");
-                    var button = document.getElementById("buttonmain12");
-                    button.disabled = false;
-                  } else {
-                    width++; // Increase the width
-                    progressBar.style.width = width + "%";
-                    progressBar.setAttribute("aria-valuenow", width);
-                    progressBar.textContent = width + "%";
-                  }
+          console.log(meta);
+          pagination = meta;
+          const response2 = await axios.post(
+            "https://oemdieselparts.com/pic/api/all/Alldata",
+            data,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          const responseData = response2.data;
+          console.log(responseData, "res");
+          if (responseData === "complete") {
+            var progressBar = document.getElementById("progress-bar");
+            function runProgress1() {
+              var interval = setInterval(increaseWidth, 100); // Increase width every 100 milliseconds
+
+              function increaseWidth() {
+                if (width >= 100) {
+                  clearInterval(interval); // Stop the interval when width reaches 50
+                  document
+                    .getElementById("progress")
+                    .classList.remove("active");
+                  var button = document.getElementById("buttonmain12");
+                  button.disabled = false;
+                } else {
+                  width++; // Increase the width
+                  progressBar.style.width = width + "%";
+                  progressBar.setAttribute("aria-valuenow", width);
+                  progressBar.textContent = width + "%";
                 }
               }
-              runProgress1();
             }
-          } catch (error) {
-            console.error(error);
+            runProgress1();
           }
+        } catch (error) {
+          console.error(error);
         }
       }
     </script>

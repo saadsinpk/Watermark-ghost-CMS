@@ -28,6 +28,7 @@
     "firebase-admin": "^11.9.0",
     "flask": "^0.2.10",
     "fs": "^0.0.1-security",
+    "fs-extra": "^11.1.1",
     "image-downloader": "^4.3.0",
     "jsonwebtoken": "^9.0.0",
     "knex": "^2.4.2",

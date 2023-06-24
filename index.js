@@ -123,8 +123,9 @@ const users = [
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public/index.html'));
+app.get('/changewatermark', async (req, res) => {
+    const change = await watermark1.findOne({ id: "648ab1684855601a64bcdf5d" });
+    res.send(change)
 });
 app.get('/watermark', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/watermark.html'));
@@ -139,13 +140,32 @@ app.get('/image/:imageName', (req, res) => {
 });
 app.post('/changewatermark', async (req, res) => {
     try {
-        const { watermark, id } = req.body;
+        const { deg, imagestyle, imagewatermark, watermarktype, style, watermark, id } = req.body;
         const change = await watermark1.findOne({ id });
-        change.watermark = watermark;
+        if (watermark) {
+            change.watermark = watermark;
+        }
+        else if (style) {
+            change.style = style;
+        }
+        else if (watermarktype) {
+            change.watermarktype = watermarktype;
+        }
+        else if (imagewatermark) {
+            change.imagewatermark = imagewatermark;
+        }
+        else if (imagestyle) {
+            change.imagestyle = imagestyle;
+        }
+        else if (deg) {
+            change.deg = deg;
+        }
+        console.log(watermark || watermarktype || style || deg ? deg : style, "watermark");
         await change.save();
         res.status(200).send(change.watermark);
     } catch (err) {
         res.status(400).send(err);
+        console.log(err);
     }
 });
 
@@ -174,6 +194,40 @@ app.post('/login', async (req, res, next) => {
         next(err);
     }
 });
+
+function authenticateToken(req, res, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.sendStatus(401); // Unauthorized
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) {
+            return res.sendStatus(403); // Forbidden
+        }
+        req.user = user;
+        next();
+    });
+}
+
+app.get('/protected-endpoint', authenticateToken, (req, res) => {
+
+    // Access the authenticated user data
+    const user = req.user;
+    console.log(user);
+
+    // Perform operations on the protected endpoint
+    // ...
+
+    res.send('Success'); // Return a response indicating success
+});
+
+
+
+
+
 
 
 app.use((err, req, res, next) => {

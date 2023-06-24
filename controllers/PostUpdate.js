@@ -10,21 +10,22 @@ import watermark from '../models/watermark.js'
 import { Console } from "console";
 import fsx from 'fs-extra';
 
-const key =
-	"6492802eb312980350eae3cf:fb5fb378053efe19fd0b06e551cca071d3331b8d2f7cb638b5645c7c96c63e5f";
+const key = "6492802eb312980350eae3cf:fb5fb378053efe19fd0b06e551cca071d3331b8d2f7cb638b5645c7c96c63e5f";
 
-const [id, secret] = key.split(":");
+let token = generateToken();
 
-const token = jwt.sign({}, Buffer.from(secret, "hex"), {
-	keyid: id,
-	algorithm: "HS256",
-	expiresIn: "60m",
-	audience: "/admin/",
-});
+function generateToken() {
+	const [id, secret] = key.split(":");
+	const expiresInMinutes = 60; // Expiration time in minutes
 
-let isFunctionRunning = 0;
-let name12;
-let updated_at1;
+	return jwt.sign({}, Buffer.from(secret, "hex"), {
+		keyid: id,
+		algorithm: "HS256",
+		expiresIn: expiresInMinutes * 60, // Expiration time in seconds
+		audience: "/admin/",
+	});
+}
+
 let imagePath = "";
 let imagePath1 = "";
 
@@ -53,8 +54,6 @@ export const Update = async (req, res, next) => {
 				}
 			});
 		}
-
-
 
 		if (req.body.post != undefined) {
 			const postId = req.body.post.current.id;
@@ -477,7 +476,7 @@ export const Update = async (req, res, next) => {
 
 				if (watermarkPromises.length > 0) {
 					Promise.all(watermarkPromises)
-						.then(() => {
+						.then(async () => {  // here I added async
 							const url = `https://oemdieselparts.com/ghost/api/admin/posts/${postId}`;
 							const headers = {
 								Authorization: `Ghost ${token}`,
@@ -512,19 +511,30 @@ export const Update = async (req, res, next) => {
 							if (payload != '' && typeof payload !== 'undefined') {
 								const checkFields = async () => {
 									try {
+										const headers = {
+											Authorization: `Ghost ${token}`,
+										};
 										const response = await axios.put(url, payload, { headers });
 										console.log('Feature SUCCESS');
 										return
 									} catch (error) {
+										if (error.response.status === 401) {
+											token = generateToken();
+											return checkFields();
+										} else {
+											console.error("ERR:", error.response.statusText);
+											throw error;
+										}
+
 										console.error('ERR', error.response);
 										isFetchingComplete = true;
 									}
 								};
-								checkFields();
+								await checkFields();  // and here I added await
 							}
 						})
 						.catch((error) => {
-							console.error(watermarkPromises.length + "Error with promisses: ", watermarkPromises);
+							console.error(watermarkPromises.length + "Error with promises: ", watermarkPromises);
 						});
 				}
 			};

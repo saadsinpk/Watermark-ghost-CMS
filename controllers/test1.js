@@ -1,44 +1,43 @@
-import mongoose from "mongoose";
-import test from "../models/test.js";
-import nodemailer from 'nodemailer';
+// import mongoose from "mongoose";
+// import test from "../models/test.js";
+// import nodemailer from 'nodemailer';
 
 
 
 export const menber = async (req, res, next) => {
     // console.log(req.body);
     try {
-        const detail = new test({ ...req.body });
-        await detail.save();
+        // const detail = new test({ ...req.body });
+        // await detail.save();
         res.status(200).send("detail has been created!!")
     } catch (err) {
-        next(err)
+        // next(err)
     }
 }
 
 export const nodemailer1 = async (req, res) => {
-    res.send(req.body)
-    let testAccount = await nodemailer.createTestAccount();
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'admin@oemdieselparts.com',
-            pass: 'ggdkqhgufudcgkpm'
-        }
-    });
-    let info = await transporter.sendMail({
-        from: '"Password 👻" <admin@oemdieselparts.com>', // sender address
-        to: "anasirfa577@gmail.com", // list of receivers
-        subject: "Hello ✔", // Subject line
-        text: "ye ap ka password hai", // plain text body
-        html: "<b>ye ap ka password hai</b>", // html body
-      });
-    
-      console.log("Message sent: %s", info.messageId);
+    // res.send(req.body)
+    // let testAccount = await nodemailer.createTestAccount();
+    // const transporter = nodemailer.createTransport({
+    //     service: 'gmail',
+    //     auth: {
+    //         user: 'muzammil.programer.sidtechno@gmail.com',
+    //         pass: 'kxpsfavvclpoahuf'
+    //     }
+    // });
+    // let info = await transporter.sendMail({
+    //     from: '"Password 👻" <admin@oemdieselparts.com>', // sender address
+    //     to: "anasirfa577@gmail.com", // list of receivers
+    //     subject: "Hello ✔", // Subject line
+    //     text: "ye ap ka password hai", // plain text body
+    //     html: "<b>ye ap ka password hai</b>", // html body
+    // });
 
-    
-      // Preview only available when sending through an Ethereal account
-      console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-      // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-    }
-    
-   
+    // console.log("Message sent: %s", info.messageId);
+
+    // // Preview only available when sending through an Ethereal account
+    // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+    res.status(200).json({ message: "Webhook request received and processed successfully." });
+}
+

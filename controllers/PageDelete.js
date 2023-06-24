@@ -9,7 +9,6 @@ import fs from 'fs';
 export const pagedelete = async (req, res, next) => {
 
   console.log(req.body.page.previous.id);
-  // res.send("hello")
   try {
     const postId = req.body.page.previous.id;
 
