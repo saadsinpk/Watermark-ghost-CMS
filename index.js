@@ -3,7 +3,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 // import passport from 'passport';
 // import session from 'express-session';
-import bodyParser from 'body-parser';
+// import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import allimage from './routes/allimage.js'
@@ -12,18 +12,19 @@ import testRoutes from "./routes/Test.js";
 import Imagerouter from "./routes/images.js";
 import cookieParser from 'cookie-parser';
 import getImage from './routes/getImage.js';
-import create from './routes/postCreate.js';
+// import create from './routes/postCreate.js';
 import Update1 from './routes/postUpdate.js';
 import delete1 from './routes/delete.js';
-import page1 from './routes/createpage.js';
+// import page1 from './routes/createpage.js';
 import UpdatePag from './routes/updatepage.js';
 import pageDelete12 from './routes/pagedelete.js';
+import DynamicImage from './routes/DynamicImage.js';
 import test from './models/test.js';
 import watermark1 from './models/watermark.js';
 import jwt from 'jsonwebtoken';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import fs from 'fs';
+// import fs from 'fs';
 
 
 const app = express();
@@ -43,17 +44,17 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-app.use('/api/all', allimage)
+app.use('/api', allimage)
 app.use('/api/user', userRoutes)
 app.use('/api/detail', testRoutes)
 app.use('/api/imgUpload', Imagerouter)
 app.use('/api/get', getImage)
-app.use('/api/create', create)
-app.use('/api/update', Update1)
-app.use('/api/delete', delete1)
-app.use("/api/page1", page1)
-app.use('/api/PUpdate', UpdatePag)
-app.use('/api/Pdelete', pageDelete12)
+app.use('/api', Update1)
+app.use('/api', delete1)
+app.use('/api', UpdatePag)
+app.use('/api', pageDelete12)
+app.use('/api/getImage', DynamicImage)
+
 
 
 
@@ -170,7 +171,9 @@ app.post('/changewatermark', async (req, res) => {
 });
 
 app.post('/login', async (req, res, next) => {
-    console.log(req.body, "saad");
+    const expiresInMinutes = 1; // Expiration time in minutes
+    const expirationTimestamp = Math.floor(Date.now() / 1000) + expiresInMinutes * 60;
+    // console.log(req.body, "saad");
     const { username, password } = req.body;
     try {
         const user = await test.findOne({ 'member.current.email': username });
@@ -180,7 +183,7 @@ app.post('/login', async (req, res, next) => {
 
         const userPassword = user.member.current.password;
         if (userPassword === password) {
-            const token = jwt.sign({ 'username': username, "password": password }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ 'username': username, "password": password }, process.env.JWT_SECRET, { expiresIn: expirationTimestamp });
             res.status(200).json({ token, user });
             // res.send("access_token", token, {
             //   httpOnly: true,
@@ -216,7 +219,7 @@ app.get('/protected-endpoint', authenticateToken, (req, res) => {
 
     // Access the authenticated user data
     const user = req.user;
-    console.log(user);
+    // console.log(user);
 
     // Perform operations on the protected endpoint
     // ...

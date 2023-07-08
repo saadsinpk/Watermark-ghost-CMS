@@ -3,7 +3,7 @@ import { page12 } from "../controllers/page.js";
 const router = express.Router()
 
 //signUP
-router.post('/post_Page', page12)
+router.post('/page_create', page12)
 
 
 export default router;

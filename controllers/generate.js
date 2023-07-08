@@ -29,12 +29,41 @@ function generateToken() {
     audience: "/admin/",
   });
 }
+const checkFields = async (url1) => {
+  const headers = {
+    Authorization: `Ghost ${token}`,
+  };
+  try {
+    const response1 = await axios.get(url1, { headers });
+    const responseData = response1.data;
+    if (responseData) {
+      for (const innerpost of responseData.posts) {
+        console.log("start postId " + innerpost.id);
+        const processedData = processPostData(innerpost);
+        try {
+          await Update(processedData);
+        } catch (error) {
+          console.error("An error occurred during the Update:", error);
+        }
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log("end postId");
+      }
+    }
+  } catch (error) {
+    if (error.response && error.response.status === 401) {
+      token = generateToken();
+      return checkFields();
+    } else {
+      if (error.response && error.response.statusText) {
+        console.error("Error:", error.response.statusText);
+      } else {
+        console.error("Error:", error);
+      }
+    }
+  }
+}
 
 export const Allimage = async (req, res, next) => {
-  //   console.clear();
-  //  setTimeout(function() {
-  //   console.clear();
-  // }, 2000);
   try {
     async function generate() {
       const apiUrl = 'https://oemdieselparts.com/ghost/api/content/posts/?key=62ba5f4d0ae64abf8445ee2054';
@@ -42,74 +71,50 @@ export const Allimage = async (req, res, next) => {
       let count_array = 0
 
       const fetchPage = async (page) => {
-        const url = `${apiUrl}&page=${page}&limit=10`;
+        const url = `${apiUrl}&page=${page}&limit=200`;
         try {
           const response = await axios.get(url);
+          console.log(response.data.meta);
           const data = response.data;
           const { posts, meta } = data;
-          console.log(posts.length);
 
           const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
           for (const post of posts) {
             const postId = post.id;
 
             const url1 = `https://oemdieselparts.com/ghost/api/admin/posts/${postId}`;
-            const headers = {
-              Authorization: `Ghost ${token}`,
-            };
 
-            const checkFields = async () => {
-              try {
-                count_array++;
-                console.log(count_array);
-                const response1 = await axios.get(url1, { headers });
-                const responseData = response1.data;
-                if (responseData) {
-                  for (const innerpost of responseData.posts) {
-                    const processedData = processPostData(innerpost);
-                    try {
-                      await Update(processedData);
-                    } catch (error) {
-                      console.error("An error occurred during the Update:", error);
-                    }
-                    await new Promise(resolve => setTimeout(resolve, 1000));
-                    console.log("end postId");
-                  }
-                }
-              } catch (error) {
-                if (error.response && error.response.status === 401) {
-                  token = generateToken();
-                  return checkFields();
-                } else {
-                  if (error.response && error.response.statusText) {
-                    console.error("Error:", error.response.statusText);
-                  } else {
-                    console.error("Error:", error);
-                  }
-                }
+            count_array++;
+            console.log(count_array);
+            await checkFields(url1);
+            if (count_array == 200) {
+              if (response.data.meta && response.data.meta.pagination) {
+               count_array = 0;
+               await fetchPage(response.data.meta.pagination.next);
+              } else {
+                isFetchingComplete = true;
               }
+              break;
             }
-            checkFields();
 
           }
         } catch (error) {
-          if (error.response && error.response.statusText) {
-            console.error("Error retrieving data:", error.response.statusText);
+          if (error.response) {
+            console.error("Error retrieving data:", error.response);
           } else {
-
             console.error("Error retrieving data:", error);
           }
         }
       };
-      fetchPage(1);
+      fetchPage(13);
+
+
     }
     generate();
 
     console.log("Post Update webhook hit");
   } catch (error) {
-    console.error(error.response.statusText);
-    res.status(500).json({ message: "An error occurred while processing the webhook." });
+    console.error(error.response);
   }
 }
 
