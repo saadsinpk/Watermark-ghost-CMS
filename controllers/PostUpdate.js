@@ -136,6 +136,7 @@ export const Update = async (req, res, next) => {
 					})
 				}
 				const watermarkPromises = [];
+				let count_Promise = 0;
 
 				for (let i = 0; i < updatedCards.length; i++) {
 					console.log(updatedCards.length);
@@ -160,14 +161,17 @@ export const Update = async (req, res, next) => {
 							await watermarkchange.save();
 						}
 						if (!mongoID1) {
+							count_Promise++;
 							first_img = updatedCards[i];
 							mongoreplace_boolen = false;
 							third_img = null;
 						} else if (mongoID1 && watermarkchange.watermark !== mongoID1.Watermark) {
+							count_Promise++;
 							first_img = mongoID1.feature_imageold;
 							mongoreplace_boolen = true;
 							third_img = updatedCards[i];
 						} else if (mongoID && watermarkchange.watermark !== mongoID.Watermark) {
+							count_Promise++;
 							first_img = mongoID.feature_imageold;
 							mongoreplace_boolen = true;
 							third_img = updatedCards[i];
@@ -222,7 +226,7 @@ export const Update = async (req, res, next) => {
 
 					}
 				}
-				if (watermarkPromises && watermarkPromises.length > 0 && watermarkPromises.length == updatedCards.length) {
+				if (watermarkPromises && watermarkPromises.length > 0 && watermarkPromises.length == count_Promise) {
 					try {
 						await Promise.all(watermarkPromises);
 						const url = `https://oemdieselparts.com/ghost/api/admin/posts/${postId}`;
