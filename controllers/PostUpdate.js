@@ -40,7 +40,7 @@ export const Update = async (req, res, next) => {
 		let currentTitle;
 		if (req.body.post != undefined) {
             const postId = req.body.post.current.id;
-
+            const authEmail = req.body.post.current.primary_author.email;
 			const updatedCards = [];
 			const updatedCards_define = [];
 			const updatedCards_index = [];
@@ -86,7 +86,6 @@ export const Update = async (req, res, next) => {
 				const mobiledoc_updated = JSON.parse(req.body.post.current.mobiledoc);
 
 
-				const watermarkchange = await watermark.findOne({ "id": "648ab1684855601a64bcdf5d" });
 
 				function addWatermarkToImage(imageUrl, mongoreplace, oldwatermark_img = null) {
 					return new Promise(async (resolve, reject) => {
@@ -97,17 +96,19 @@ export const Update = async (req, res, next) => {
 										{ feature_imageold: imageUrl }
 									],
 								});
+								change.AuthEmail = authEmail;
 								change.feature_image = oldwatermark_img.replace('https://oemdieselparts.com/content/images/', 'https://oemdieselparts.com/pic/api/getImage/');
-								change.Watermark = watermarkchange.watermark;
+								change.Watermark = '';
 								await change.save();
 								resolve(imageUrl.replace('https://oemdieselparts.com/content/images/', 'https://oemdieselparts.com/pic/api/getImage/'));
 							} else {
 								const ReplaceStatussave = new ReplaceStatus({
 									id: postId,
+									AuthEmail: authEmail,
 									feature_imageold: imageUrl,
 									feature_image: imageUrl.replace('https://oemdieselparts.com/content/images/', 'https://oemdieselparts.com/pic/api/getImage/'),
 									hasWatermark: true,
-									Watermark: watermarkchange.watermark,
+									Watermark: '',
 									DocumentType: "post",
 								});
 								await ReplaceStatussave.save();
@@ -150,32 +151,13 @@ export const Update = async (req, res, next) => {
 								{ feature_image: updatedCards[i] }
 							],
 						});
-						const mongoID = await ReplaceStatus.findOne({
-							$or: [
-								{ feature_imageold: updatedCards[i] },
-								{ feature_image: updatedCards[i] },
-							],
-						});
-						if (mongoID1 && watermarkchange.watermarktype == "image") {
-							watermarkchange.watermark = watermarkchange.imagewatermark
-							await watermarkchange.save();
-						}
 						if (!mongoID1) {
 							count_Promise++;
 							first_img = updatedCards[i];
 							mongoreplace_boolen = false;
 							third_img = null;
-						} else if (mongoID1 && watermarkchange.watermark !== mongoID1.Watermark) {
-							count_Promise++;
-							first_img = mongoID1.feature_imageold;
-							mongoreplace_boolen = true;
-							third_img = updatedCards[i];
-						} else if (mongoID && watermarkchange.watermark !== mongoID.Watermark) {
-							count_Promise++;
-							first_img = mongoID.feature_imageold;
-							mongoreplace_boolen = true;
-							third_img = updatedCards[i];
-						}
+						} 
+						
 						if(first_img != undefined) {
 							const watermarkPromise = await addWatermarkToImage(first_img, mongoreplace_boolen, third_img)
 								.then((watermarkedImagePath) => {

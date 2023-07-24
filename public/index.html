@@ -109,11 +109,13 @@
 })
   .then(response => {
     const data = response.data;
+    console.log(data.user.id)
 
     if (data.user.member) {
       console.log('Login successful');
       localStorage.setItem('access_token', data.token);
       localStorage.setItem('access_token_email', data.user.member.current.email);
+      localStorage.setItem('id', data.user._id);
       window.location.href = 'watermark.html';
     } else {
       console.log('Login failed:', data.message);

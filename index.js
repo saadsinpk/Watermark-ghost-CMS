@@ -1,31 +1,32 @@
 
 import express from 'express';
 import mongoose from 'mongoose';
-// import passport from 'passport';
-// import session from 'express-session';
-// import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import allimage from './routes/allimage.js'
 import userRoutes from "./routes/usersRoutes.js";
-import testRoutes from "./routes/Test.js";
 import Imagerouter from "./routes/images.js";
 import cookieParser from 'cookie-parser';
 import getImage from './routes/getImage.js';
-// import create from './routes/postCreate.js';
 import Update1 from './routes/postUpdate.js';
 import delete1 from './routes/delete.js';
-// import page1 from './routes/createpage.js';
+import getStaff from './routes/getStaff.js';
+import generator from './routes/generator.js';
+import getSingleStaff from './routes/getSingleStaff.js';
+import addStaff from './routes/addStaff.js';
+import deleteStaff from './routes/deleteStaff.js';
+import updateStaff from './routes/updateStaff.js';
 import UpdatePag from './routes/updatepage.js';
 import pageDelete12 from './routes/pagedelete.js';
 import DynamicImage from './routes/DynamicImage.js';
-import test from './models/test.js';
+import staff from './models/staff.js';
 import watermark1 from './models/watermark.js';
 import jwt from 'jsonwebtoken';
 import path from 'path';
 import { fileURLToPath } from 'url';
-// import fs from 'fs';
+import cache from './cacheManager.js';
 
+// const cache = fileCache.create({ life: 60 * 60 * 24 * 7 }); // cache expires after 7 days
 
 const app = express();
 app.use(cors())
@@ -46,123 +47,83 @@ const __dirname = path.dirname(__filename);
 
 app.use('/api', allimage)
 app.use('/api/user', userRoutes)
-app.use('/api/detail', testRoutes)
 app.use('/api/imgUpload', Imagerouter)
 app.use('/api/get', getImage)
 app.use('/api', Update1)
 app.use('/api', delete1)
+app.use('/api', getStaff)
+app.use('/api', generator)
+app.use('/api', getSingleStaff)
+app.use('/api', addStaff)
+app.use('/api', deleteStaff)
+app.use('/api', updateStaff)
 app.use('/api', UpdatePag)
 app.use('/api', pageDelete12)
 app.use('/api/getImage', DynamicImage)
 
 
 
-
-// app.use(express.urlencoded({ extended: false }));
-// app.use(session({ secret: 'your-secret-key', resave: false, saveUninitialized: false }));
-// app.use(passport.initialize());
-// app.use(passport.session());
-
-
-
-
-
-
-const users = [
-    { id: 1, username: 'john', password: 'password' },
-    { id: 2, username: 'jane', password: 'password' },
-];
-
-
-// passport.use(
-//     new LocalStrategy((username, password, done) => {
-//         const user = users.find((user) => user.username === username && user.password === password);
-//         if (user) {
-//             return done(null, user);
-//         }
-//         return done(null, false);
-//     })
-// );
-
-// passport.serializeUser((user, done) => {
-//     done(null, user.id);
-// });
-
-// passport.deserializeUser((id, done) => {
-//     const user = users.find((user) => user.id === id);
-//     done(null, user);
-// });
-
-
-// app.post('/register', (req, res) => {
-//     const { username, password } = req.body;
-
-
-//     const existingUser = users.find((user) => user.username === username);
-//     if (existingUser) {
-//         return res.status(400).json({ message: 'Username already taken' });
-//     }
-
-
-//     const newUser = {
-//         id: users.length + 1,
-//         username: username,
-//         password: password,
-//     };
-
-
-//     users.push(newUser);
-
-
-//     res.status(200).json({ message: 'Registration successful' });
-// });
-
-// app.post('/test', (req, res) => {
-//     res.send(users);
-//     console.log(req.body);
-// });
-
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/changewatermark', async (req, res) => {
-    const change = await watermark1.findOne({ id: "648ab1684855601a64bcdf5d" });
-    res.send(change)
+    const userId = req.query.user_id; // Assuming the parameter name is "userId" in the URL
+    const change = await watermark1.findOne({ userID: userId });
+    res.send(change);
 });
 app.get('/watermark', (req, res) => {
     res.sendFile(path.join(__dirname, 'public/watermark.html'));
 });
 app.get('/image/:imageName', (req, res) => {
-    const imageName = req.params.imageName; // Get the image name from the URL parameter
-
-    // Replace 'image.jpg' with the actual image file name and extension
-    // const imagePath = path.join(__dirname, `/path2/${imageName}`);
+    const imageName = req.params.imageName; 
     res.send('imagePath');
 
 });
 app.post('/changewatermark', async (req, res) => {
     try {
-        const { deg, imagestyle, imagewatermark, watermarktype, style, watermark, id } = req.body;
-        const change = await watermark1.findOne({ id });
+        const { deg, alignment, imagewatermark, watermarktype, watermarktypeenable, offsetx, offsety, opacity, widthscale, watermark, id } = req.body;
+        let change = await watermark1.findOne({ userID: id });
+        if (!change) {
+            change = new watermark1({ userID: id });
+            change.watermark = '';
+            change.alignment = '';
+            change.watermarktype = 'image';
+            change.watermarktypeenable = 'enable';
+            change.imagewatermark = '';
+            change.offsetx = '';
+            change.offsety = '';
+            change.opacity = '50';
+            change.widthscale = '50';
+        }
         if (watermark) {
             change.watermark = watermark;
         }
-        else if (style) {
-            change.style = style;
+        if (alignment) {
+            change.alignment = alignment;
         }
-        else if (watermarktype) {
+        if (watermarktype) {
             change.watermarktype = watermarktype;
         }
-        else if (imagewatermark) {
+        if (watermarktypeenable) {
+            change.watermarktypeenable = watermarktypeenable;
+        }
+        if (imagewatermark) {
             change.imagewatermark = imagewatermark;
         }
-        else if (imagestyle) {
-            change.imagestyle = imagestyle;
+        if (offsetx) {
+            change.offsetx = offsetx;
         }
-        else if (deg) {
-            change.deg = deg;
+        if (offsety) {
+            change.offsety = offsety;
         }
-        console.log(watermark || watermarktype || style || deg ? deg : style, "watermark");
+        if (opacity) {
+            change.opacity = opacity;
+        }
+        if (widthscale) {
+            change.widthscale = widthscale;
+        }
+
         await change.save();
+        cache.clear();
         res.status(200).send(change.watermark);
     } catch (err) {
         res.status(400).send(err);
@@ -171,12 +132,11 @@ app.post('/changewatermark', async (req, res) => {
 });
 
 app.post('/login', async (req, res, next) => {
-    const expiresInMinutes = 1; // Expiration time in minutes
+    const expiresInMinutes = 1;
     const expirationTimestamp = Math.floor(Date.now() / 1000) + expiresInMinutes * 60;
-    // console.log(req.body, "saad");
     const { username, password } = req.body;
     try {
-        const user = await test.findOne({ 'member.current.email': username });
+        const user = await staff.findOne({ 'member.current.email': username });
         if (!user) {
             return next(createError(404, "User not found!"));
         }
@@ -185,11 +145,6 @@ app.post('/login', async (req, res, next) => {
         if (userPassword === password) {
             const token = jwt.sign({ 'username': username, "password": password }, process.env.JWT_SECRET, { expiresIn: expirationTimestamp });
             res.status(200).json({ token, user });
-            // res.send("access_token", token, {
-            //   httpOnly: true,
-
-            // }).status(200).json(user);
-            // res.status(200).send(user);
         } else {
             return next(createError(400, "Wrong Credentials!"));
         }
@@ -197,41 +152,30 @@ app.post('/login', async (req, res, next) => {
         next(err);
     }
 });
+app.post('/logout', (req, res) => {
+  res.status(200).json({ message: "Logout successful" });
+});
 
 function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
-    if (!token) {
-        return res.sendStatus(401); // Unauthorized
+  if (!token) {
+    return res.sendStatus(401);
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.sendStatus(403);
     }
-
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) {
-            return res.sendStatus(403); // Forbidden
-        }
-        req.user = user;
-        next();
-    });
+    req.user = user;
+    next();
+  });
 }
 
 app.get('/protected-endpoint', authenticateToken, (req, res) => {
-
-    // Access the authenticated user data
-    const user = req.user;
-    // console.log(user);
-
-    // Perform operations on the protected endpoint
-    // ...
-
-    res.send('Success'); // Return a response indicating success
+  res.send('Success');
 });
-
-
-
-
-
-
 
 app.use((err, req, res, next) => {
     const status = err.status || 500;
@@ -242,9 +186,6 @@ app.use((err, req, res, next) => {
         message,
     })
 })
-
-// app.post('/passlogin', passport.authenticate('local', { successRedirect: '/loginfun', failureRedirect: '/login' }));
-
 
 const port = 3000;
 app.listen(port, () => {

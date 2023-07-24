@@ -55,6 +55,10 @@ const imageSchema = new mongoose.Schema({
         type: String,
         default: 'watermark',
     },
+    AuthEmail: {
+        type: String,
+        default: '',
+    },
     DocumentType: {
         type: String,
         default: 'post',

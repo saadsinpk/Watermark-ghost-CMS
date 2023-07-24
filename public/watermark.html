@@ -1,423 +1,303 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
-    />
-    <!-- Option 1: Include in HTML -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"
-    />
-    <link rel="stylesheet" href="style.css" />
-    <title>Upload File</title>
-  </head>
-  <body>
-    <div class="container-fluid">
-      <div class="row">
-        <nav class="navbar navbar-light bg-light">
-          <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-              <img
-                src="./watermark-logo-01.png"
-                alt=""
-                width="150"
-                height="24"
-                class="d-inline-block align-text-top"
-              />
-            </a>
-          </div>
-        </nav>
 
-        <div class="main12">
-          <div
-            class="col-lg-6 col-md-12"
-            style="
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://common.olemiss.edu/_js/sweet-alert/sweet-alert.css">
+
+  </script>
+  <title>Upload File</title>
+</head>
+<style type="text/css">
+  .uperdiv {
+    width: 50%;
+    margin: 0 auto;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: 25px;
+    border-radius: 10px;
+  }
+
+  .searchbox {
+    width: 50%;
+  }
+
+  .logout-btn {
+    border: none;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 20px;
+    font-size: 13px;
+    padding-left: 15px;
+    padding-right: 15px;
+    background-color: transparent;
+  }
+
+  .dotsboxes {
+
+    width: 100%;
+    margin: 0 auto;
+
+  }
+  .offsetlabel{
+    color: #67727c;
+    font-size: 20px;
+  }
+
+  .alignmentdiv {
+    margin-top: 5%;
+  }
+
+  .rowdiv {
+
+    margin: 0 auto;
+    box-shadow: 0px 0px 56px rgba(69, 69, 69, 0.2);
+    border: none;
+    padding: 13px;
+    border-radius: 10px;
+  }
+
+  .innerboxes {
+
+    border: 1px solid gray;
+    text-align: center;
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+    border-top: none;
+
+  }
+
+  .innerboxes1 {
+    border-top: 1px solid gray;
+    margin-top: 0% !important;
+  }
+
+  .Opacitydiv {
+    margin-top: 5%;
+  }
+  .offsetlabel{
+    font-size: 20px !important;
+    margin-top: 5%;
+  }
+  .rangeinput{
+    width: 30%;
+  }
+</style>
+
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            <img src="./watermark-logo-01.png" alt="" width="150" height="24" class="d-inline-block align-text-top" />
+          </a>
+          <a class="navbar-brand" href="#">
+            <button class="logout-btn" onclick="Logout('')">Logout</button>
+          </a>
+        </div>
+      </nav>
+
+      <div class="main12">
+        <div class="col-lg-6 col-md-12" style="
               /* display: flex; */
               justify-content: center;
               align-items: flex-start;
               margin-top: 4rem;
-            "
-          >
-            <div class="wallImg1">
-              <div class="wallImg">
-                <img src="./watermark-r.jpeg" alt="" />
-              </div>
-              <div class="wallSecond">
-                <div style="width: 100%">
-                  <h3
-                    style="
+            ">
+          <div class="wallImg1">
+            <div class="wallImg">
+              <img src="./watermark-r.jpeg" alt="" />
+            </div>
+            <div class="wallSecond">
+              <div style="width: 100%">
+                <h3 style="
                       display: flex;
                       justify-content: center;
                       text-align: center;
-                    "
-                  >
-                    Apply Watermark From Your Images
-                  </h3>
-                  <p
-                    style="
+                    ">
+                  Apply Watermark From Your Images
+                </h3>
+                <p style="
                       display: flex;
                       justify-content: center;
                       align-items: center;
-                    "
-                  >100% Automatically</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-6 col-md-12">
-            <div class="wrapper">
-              <br />
-              <br />
-              <br />
-              <div class="box pl-0">
-                <div class="form-check form-switch">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="flexSwitchCheckDefault"
-                    onclick="Switch1()"
-                  />
-                  <label class="form-check-label" for="flexSwitchCheckDefault"
-                    >Image Watermark</label
-                  >
-                </div>
-                <!-- <p id="status"></p> -->
-                <div id="keyboard_box">
-                  <div class="keyboard_box">
-                    <div class="typeKeyboard">
-                      <textarea
-                        type="text"
-                        id="demo"
-                        class="typeval"
-                        placeholder="Ice Skating"
-                        readonly=""
-                        value=""
-                      >
-                      </textarea>
-                    </div>
-                    <div
-                      class="Keyboard-module"
-                      role="group"
-                      aria-label="Keyboard"
-                    >
-                      <div class="mx-auto">
-                        <div
-                          class="Keyboard-module_row my-2 flex items-center gap1"
-                        >
-                          <button
-                            type="button"
-                            data-key="Q"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            q</button
-                          ><button
-                            type="button"
-                            data-key="W"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            w</button
-                          ><button
-                            type="button"
-                            data-key="E"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            e</button
-                          ><button
-                            type="button"
-                            data-key="R"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            r</button
-                          ><button
-                            type="button"
-                            data-key="T"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            t</button
-                          ><button
-                            type="button"
-                            data-key="Y"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            y</button
-                          ><button
-                            type="button"
-                            data-key="U"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            u</button
-                          ><button
-                            type="button"
-                            data-key="I"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            i</button
-                          ><button
-                            type="button"
-                            data-key="O"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            o</button
-                          ><button
-                            type="button"
-                            data-key="P"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            p
-                          </button>
-                        </div>
-                        <div
-                          class="Keyboard-module_row my-2 flex items-center gap1"
-                        >
-                          <div data-testid="spacer" class="keygap"></div>
-                          <button
-                            type="button"
-                            data-key="A"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            a</button
-                          ><button
-                            type="button"
-                            data-key="S"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            s</button
-                          ><button
-                            type="button"
-                            data-key="D"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            d</button
-                          ><button
-                            type="button"
-                            data-key="F"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            f</button
-                          ><button
-                            type="button"
-                            data-key="G"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            g</button
-                          ><button
-                            type="button"
-                            data-key="H"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            h</button
-                          ><button
-                            type="button"
-                            data-key="J"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            j</button
-                          ><button
-                            type="button"
-                            data-key="K"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            k</button
-                          ><button
-                            type="button"
-                            data-key="L"
-                            class="Key-module_row-button flex typebton items-center justify-center"
-                          >
-                            l
-                          </button>
-                          <div data-testid="spacer" class="keygap"></div>
-                        </div>
-                        <div
-                          class="Keyboard-module_row my-2 flex items-center gap1"
-                        >
-                          <button
-                            type="button"
-                            id="submitbtn"
-                            data-key="en"
-                            class="Key-module_row-button flex specialbtn items-center justify-center Key-module_oneAndAHalf__K6JBY"
-                          >
-                            enter</button
-                          ><button
-                            type="button"
-                            data-key="Z"
-                            class="Key-module_row-button typebton flex items-center justify-center"
-                          >
-                            z</button
-                          ><button
-                            type="button"
-                            data-key="X"
-                            class="Key-module_row-button typebton flex items-center justify-center"
-                          >
-                            x</button
-                          ><button
-                            type="button"
-                            data-key="C"
-                            class="Key-module_row-button typebton flex items-center justify-center"
-                          >
-                            c</button
-                          ><button
-                            type="button"
-                            data-key="V"
-                            class="Key-module_row-button typebton flex items-center justify-center"
-                          >
-                            v</button
-                          ><button
-                            type="button"
-                            data-key="B"
-                            class="Key-module_row-button typebton flex items-center justify-center"
-                          >
-                            b</button
-                          ><button
-                            type="button"
-                            data-key="N"
-                            class="Key-module_row-button typebton flex items-center justify-center"
-                          >
-                            n</button
-                          ><button
-                            type="button"
-                            data-key="M"
-                            class="Key-module_row-button typebton flex items-center justify-center"
-                          >
-                            m</button
-                          ><button
-                            type="button"
-                            data-key="back"
-                            aria-label="backspace"
-                            class="Key-module_row-button flex specialbtn typebton items-center justify-center Key-module_oneAndAHalf__K6JBY"
-                          >
-                            &nbsp;&nbsp;<svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              height="24"
-                              viewBox="0 0 24 24"
-                              width="30"
-                              class="game-icon"
-                              data-testid="icon-backspace"
-                            >
-                              <path
-                                fill="var(--color-tone-1)"
-                                d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7.07L2.4 12l4.66-7H22v14zm-11.59-2L14 13.41 17.59 17 19 15.59 15.41 12 19 8.41 17.59 7 14 10.59 10.41 7 9 8.41 12.59 12 9 15.59z"
-                              ></path>
-                            </svg>
-                            &nbsp;&nbsp;
-                          </button>
-                        </div>
-                        <div
-                          class="Keyboard-module_row my-2 flex items-center gap1"
-                        >
-                          <div data-testid="spacer" class="keygap"></div>
-                          <button
-                            type="button"
-                            data-key=" "
-                            class="Key-module_row-button spacebutton flex items-center justify-center"
-                          >
-                            Space
-                          </button>
-                          <div data-testid="spacer" class="keygap"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div>
-                    <label for="vol"
-                      >deg: <span id="degvalue">180 &deg;</span></label
-                    >
-                    <input
-                      type="range"
-                      id="vol"
-                      max="360"
-                      value="180"
-                      onchange="range(event)"
-                    />
-                    <button id="submitrange">submit</button>
-                  </div>
-                </div>
-                <div class="textwatermark" id="textwatermark">
-                  <div class="input-box">
-                    <input
-                      type="file"
-                      onchange="uploadImage(event)"
-                      id="upload"
-                      hidden
-                      multiple
-                      accept="image/*"
-                    />
-                    <label for="upload" class="uploadlabel">
-                      <div class="imgdiv">
-                        <img id="imgdiv" src="" alt="img" />
-                      </div>
-                      <div
-                        style="
-                          display: flex;
-                          flex-direction: column;
-                          text-align: center;
-                          justify-content: center;
-                        "
-                      >
-                        <span><i class="fa fa-cloud-upload"></i></span>
-                        <p>Upload Images</p>
-                        <h4>or drop a file,</h4>
-                        <h5>paste image or URL</h5>
-                      </div>
-                    </label>
-                  </div>
-                  <div class="max-w-md">
-                    <p
-                      class="text-2xs text-typo-secondary text-center sm:!text-left !mt-4"
-                      style="
-                        font-size: 0.625rem;
-                        line-height: 1rem;
-                        color: #67727c;
-                        text-align: left !important;
-                      "
-                    >
-                      By uploading an image or URL you agree to our
-                      <a
-                        target="_blank"
-                        class="text-typo-secondary underline"
-                        draggable="false"
-                        href="/tos"
-                        >Terms of Service</a
-                      >. This site is protected by hCaptcha and its
-                      <a
-                        target="_blank"
-                        rel="noopener"
-                        class="text-typo-secondary underline"
-                        draggable="false"
-                        href="https://hcaptcha.com/privacy"
-                        >Privacy Policy</a
-                      >
-                      and
-                      <a
-                        target="_blank"
-                        rel="noopener"
-                        class="text-typo-secondary underline"
-                        draggable="false"
-                        href="https://hcaptcha.com/terms"
-                        >Terms of Service</a
-                      >
-                      apply.
-                    </p>
-                  </div>
-                </div>
+                    ">100% Automatically</p>
               </div>
             </div>
           </div>
         </div>
+        <div class="col-lg-6 col-md-12">
+          <div class="wrapper">
+            <br />
+            <br />
+            <br />
+            <div class="box pl-0">
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefaultEnableDisable"
+                  onclick="Switchenable(`${id}`)" />
+                <label class="form-check-label" for="flexSwitchCheckDefaultEnableDisable">Enable/Disable</label>
+              </div>
+              <div class="textwatermark" id="textwatermark">
+                <div class="input-box">
+                  <input type="file" onchange="uploadImage(event)" id="upload" hidden multiple accept="image/*" />
+                  <label for="upload" class="uploadlabel">
+                    <div class="imgdiv">
+                      <img id="imgdiv" src="" alt="img" />
+                    </div>
+                    <div style="
+                          display: flex;
+                          flex-direction: column;
+                          text-align: center;
+                          justify-content: center;
+                        ">
+                      <span><i class="fa fa-cloud-upload"></i></span>
+                      <p>Upload Images</p>
+                      <h4>or drop a file,</h4>
+                      <h5>paste image or URL</h5>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              <div class="alignmentdiv">
+                <div>
+             
+                  <h4>Watermark Alignment</h4>
+                  <div class="dotsboxes">
+                    <div class="row rowdiv">
+                      <div class="col-4 innerboxes innerboxes1"><input class="form-check-input"  type="radio"
+                          name="options" id="option2" value="1" onchange="handleRadioChange(this)" checked ></div>
+                      <div class="col-4 innerboxes innerboxes1"><input class="form-check-input" type="radio"
+                          name="options" id="option2" value="2" onchange="handleRadioChange(this)"></div>
+                      <div class="col-4 innerboxes innerboxes1"><input class="form-check-input" type="radio"
+                          name="options" id="option2" value="3" onchange="handleRadioChange(this)"></div>
+                      <div class="col-4 innerboxes"><input class="form-check-input" type="radio" name="options"
+                          id="option2" value="4" onchange="handleRadioChange(this)"></div>
+                      <div class="col-4 innerboxes"><input class="form-check-input" type="radio" name="options"
+                          id="option2" value="5" onchange="handleRadioChange(this)"></div>
+                      <div class="col-4 innerboxes"><input class="form-check-input" type="radio" name="options"
+                          id="option2" value="6" onchange="handleRadioChange(this)"></div>
+                      <div class="col-4 innerboxes"><input class="form-check-input" type="radio" name="options"
+                          id="option2" value="7" onchange="handleRadioChange(this)"></div>
+                      <div class="col-4 innerboxes"><input class="form-check-input" type="radio" name="options"
+                          id="option2" value="8" onchange="handleRadioChange(this)"></div>
+                      <div class="col-4 innerboxes"><input class="form-check-input" type="radio" name="options"
+                          id="option2" value="9" onchange="handleRadioChange(this)"></div>
 
-        <footer>
-          <div
-            style="
+
+
+                    </div>
+                    <h4 style="text-align: center; margin-top: 2%;">Select the watermark alignment</h4>
+
+                  </div>
+
+                </div>
+                <div class="Opacitydiv">
+                  <h4>Watermark Offset in percentage</h4>
+                  <p>X will only work on top left, center left, bottom left, top right, center right, bottom right</p>
+                  <p>X will give margin on left for top left, center left, bottom left</p>
+                  <p>X will give margin on right for top right, center right, bottom right</p>
+                  <p>Y will give margin on top for top, and middle but for bottom will give margin at bottom</p>
+                  <div>
+                  <label class="offsetlabel" for="">x:
+                    <input id="x-range" onchange="handleInputChange()"  class="rangeinput" type="number" min="0">
+                  </label>
+                </div>
+                <div>
+                  <label class="offsetlabel"  for="">y:
+                    <input id="y-range" onchange="handleInputChange()"  class="rangeinput" type="number" min="0">
+                  </label>
+                </div>
+                <h4 style=" margin-top: 2%;">Enter watermark offset value</h4>
+                </div>
+
+                <div class="Opacitydiv">
+                  <h4>Opacity</h4>
+                  <div id="Opacityrange"></div>
+                  <input type="range" onchange="rangevalue()"   class="form-range" id="customRange1">
+                </div>
+                <div class="Opacitydiv">
+                  <h4>Width-Scale</h4>
+                  <div id="width-scale"></div>
+                  <input type="range" onchange="widthscale()"  class="form-range" id="customRange2">
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="formshow" class="main12">
+        <div class="col-lg-12 col-md-12">
+          <div class="wrapper">
+            <br />
+            <br />
+            <br />
+            <div class="uperdiv">
+              <div class="mb-3">
+                <h4>Add New User</h4>
+                <form id="addUserForm">
+                  <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" />
+                  </div>
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" />
+                  </div>
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" />
+                  </div>
+                  <div style="display: flex; justify-content: center;">
+                    <button type="submit" class="btn btn-primary">Add User</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            <div style="margin-top: 4%">
+              <h4>User List</h4>
+              <input type="text" id="searchInput" class="form-control searchbox" placeholder="Search users" />
+
+              <table id="userTable" class="table table-striped table-bordered" style="margin-top: 3%">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="userTableBody"></tbody>
+              </table>
+
+              <div id="pagination"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div style="
               display: flex;
               justify-content: space-between;
               background-color: #bebebe;
@@ -425,265 +305,569 @@
               align-items: center;
               padding: 14px 47px;
               text-align: center;
-            "
-          >
-            <p>&copy; 2023 Your Company. All rights reserved.</p>
-          </div>
-        </footer>
-      </div>
+            ">
+          <p>&copy; 2023 Your Company. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
+  </div>
 
-    <script>
-      const range = (event) => {
-        const value = event.target.value;
-        console.log(value);
-        document.getElementById("degvalue").innerHTML = value + "&deg;";
-      };
+  <script>
+    var id = localStorage.getItem('id');
+    var watermarkvalues = { 
+      alignment:'1',
+      offsetx:'0',
+      offsety:'0',
+      opacity:'50',
+      widthscale:'50',
+      id:id,
+    }
 
-      document
-        .getElementById("submitrange")
-        .addEventListener("click", async () => {
-          const deg = document.getElementById("vol").value;
-          console.log(deg);
-          try {
-            const response = await axios.post(
-              "https://oemdieselparts.com/pic/changewatermark",
-              {
-                id: "648ab1684855601a64bcdf5d",
-                deg: deg,
-              }
-            );
+    if (id != "64b140978b4f61006c94595a") {
+      document.getElementById('userTableBody').innerHTML = '';
+      document.getElementById('formshow').innerHTML = '';
+    }
+    const rangevalue =  async() => {
+      console.log("Opacity:",document.getElementById('customRange1').value)
+      document.getElementById('Opacityrange').innerHTML=document.getElementById('customRange1').value;
+      watermarkvalues.opacity=document.getElementById('customRange1').value
+      try {
+        const response = await axios.post(
+          "https://oemdieselparts.com/pic/changewatermark",
+          watermarkvalues
+        );
+        console.log(response);
+        console.log(status);
+      } catch (error) {
+        console.error(error);
+      }
+
+    }
+    const widthscale = async() =>{
+      console.log("Width-Scale:",document.getElementById('customRange2').value)
+      document.getElementById('width-scale').innerHTML=document.getElementById('customRange2').value;
+      watermarkvalues.widthscale=document.getElementById('customRange2').value
+      console.log(watermarkvalues)
+      try {
+        const response = await axios.post(
+          "https://oemdieselparts.com/pic/changewatermark",
+          watermarkvalues
+        );
+        console.log(response);
+        console.log(status);
+      } catch (error) {
+        console.error(error);
+      }
+
+    }
+    async function handleInputChange() {
+      var numberx = document.getElementById("x-range");
+      var numbery = document.getElementById("y-range");
+      var valuex = numberx.value;
+      var valuey = numbery.value;
+      watermarkvalues.offsetx=valuex
+      watermarkvalues.offsety=valuey
+
+      console.log("x:", valuex);
+      console.log("y:", valuey);
+      try {
+        const response = await axios.post(
+          "https://oemdieselparts.com/pic/changewatermark",
+          watermarkvalues
+        );
+        console.log(response);
+        console.log(status);
+      } catch (error) {
+        console.error(error);
+      }
+      // Perform any other action you want with the value
+    }
+    const range = (event) => {
+      const value = event.target.value;
+      console.log(value);
+      document.getElementById("degvalue").innerHTML = value + "&deg;";
+    };
+    async function  handleRadioChange (radio) {
+      console.log("Selected option:", radio.value);
+      watermarkvalues.alignment=radio.value
+      try {
+        const response = await axios.post(
+          "https://oemdieselparts.com/pic/changewatermark",
+          watermarkvalues
+        );
+        console.log(response);
+        console.log(status);
+      } catch (error) {
+        console.error(error);
+      }
+
+      // Perform any other action you want based on the selected option
+    }
+
+    const submit = async (userId) => {
+      const deg = document.getElementById("vol").value;
+      console.log(userId)
+      console.log(deg);
+      try {
+        const response = await axios.post(
+          "https://oemdieselparts.com/pic/changewatermark",
+          {
+            id: id,
+            deg: deg,
+          }
+        );
+        Toastify({
+          text: "successfully!",
+          duration: 3000,
+          close: true, button,
+          gravity: "top",
+        }).showToast();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    function uploadImage(event) {
+      console.log(id)
+      event.preventDefault();
+      const fileInput = document.getElementById("upload");
+      const files = fileInput.files;
+
+      if (files) {
+        const formData = new FormData();
+        for (var i = 0; i < files.length; i++) {
+          formData.append("image", files[i]);
+        }
+        formData.append('id', id)
+
+        fetch("https://oemdieselparts.com/pic/api/imgUpload/upload", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.text();
+            } else {
+              throw new Error("Image upload failed.");
+            }
+          })
+          .then((imagePath) => {
+            console.log(imagePath);
+            const imgElement = document.getElementById("imgdiv");
+
+            imgElement.setAttribute("src", imagePath);
             Toastify({
               text: "successfully!",
-              duration: 3000, // Duration in milliseconds
-              close: true, // Show a close button
-              gravity: "top", // Position of the toast message (top, bottom, left, right)
+              duration: 3000,
+              close: true,
+              gravity: "top",
             }).showToast();
-          } catch (error) {
-            console.error(error);
-          }
-        });
-
-      function uploadImage(event) {
-        event.preventDefault();
-        const fileInput = document.getElementById("upload");
-        const files = fileInput.files;
-
-        if (files) {
-          const formData = new FormData();
-          for (var i = 0; i < files.length; i++) {
-            formData.append("image", files[i]);
-          }
-
-          fetch("https://oemdieselparts.com/pic/api/imgUpload/upload", {
-            method: "POST",
-            body: formData,
           })
-            .then((response) => {
-              if (response.ok) {
-                return response.text();
-              } else {
-                throw new Error("Image upload failed.");
-              }
-            })
-            .then((imagePath) => {
-              console.log(imagePath);
-              const imgElement = document.getElementById("imgdiv"); // Get the <img> element by its ID
-
-              // Set the src attribute of the <img> element
-              imgElement.setAttribute("src", imagePath);
-              Toastify({
-                text: "successfully!",
-                duration: 3000, // Duration in milliseconds
-                close: true, // Show a close button
-                gravity: "top", // Position of the toast message (top, bottom, left, right)
-              }).showToast();
-            })
-            .catch((error) => {
-              console.error(error);
-            });
-        }
+          .catch((error) => {
+            console.error(error);
+          });
       }
-      const imageStyle12 = async (item1) => {
-        const response1 = await axios.get(
-          "https://oemdieselparts.com/pic/changewatermark"
-        );
-        const data = response1.data;
+    }
 
-        document
-          .getElementById(data.imagestyle + "btn")
-          .classList.remove("border12");
-        try {
-          const response = await axios.post(
-            "https://oemdieselparts.com/pic/changewatermark",
-            {
-              id: "648ab1684855601a64bcdf5d",
-              imagestyle: item1,
-            }
-          );
-          console.log(item1);
-          document.getElementById(item1 + "btn").classList.add("border12");
-        } catch (error) {
-          console.error(error);
-        }
-      };
+    const access_token = localStorage.getItem("access_token");
+    const headers = {
+      Authorization: `Bearer ${access_token}`,
+    };
 
-      const Center = async (item) => {
-        const response1 = await axios.get(
-          "https://oemdieselparts.com/pic/changewatermark"
-        );
-        const data = response1.data;
-        document.getElementById("demo").value = data.watermark;
-        document.getElementById(data.style).classList.remove("border12");
+    if (!access_token) {
+      window.location.href = "https://oemdieselparts.com/pic/";
+    }
+    var width = 0;
+    let pagination = "";
 
-        style = data.style;
-        style1 = item;
-        try {
-          const response = await axios.post(
-            "https://oemdieselparts.com/pic/changewatermark",
-            {
-              id: "648ab1684855601a64bcdf5d",
-              style: style1,
-            }
-          );
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
 
-          document.getElementById(item).classList.add("border12");
-        } catch (error) {
-          console.error(error);
-        }
-      };
-      const access_token = localStorage.getItem("access_token");
-      // Assuming you have stored the token in a variable called 'token'
-      const headers = {
-        Authorization: `Bearer ${access_token}`,
-      };
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("https://oemdieselparts.com/pic/api/getStaff");
+        const users = response.data;
 
-      if (!access_token) {
-        window.location.href = "https://oemdieselparts.com/pic/";
-      }
-      var width = 0;
-      let pagination = "";
+        const tableBody = document.getElementById("userTableBody");
+        tableBody.innerHTML = "";
 
-    </script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-      // Get the input field and all the keyboard buttons
-      const inputField = document.getElementById("demo");
-      const keyboardButtons = document.querySelectorAll(
-        ".Key-module_row-button"
-      );
 
-      // Add click event listeners to the keyboard buttons
-      keyboardButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          // Get the value of the clicked button
-          const buttonValue = button.getAttribute("data-key");
+        users.forEach((user) => {
 
-          if (buttonValue === "Space") {
-            // Update the input field value with a space character
-            inputField.value += " ";
-          } else if (buttonValue === "back") {
-            // Remove the last character from the input field
-            inputField.value = inputField.value.slice(0, -1);
-          } else if (buttonValue === "en") {
-            postData();
-          } else {
-            // Update the input field value with the clicked button value
-            inputField.value += buttonValue;
-          }
+          const row = document.createElement("tr");
+          row.innerHTML = `
+              <td>${user.member.current.name}</td>
+              <td>${user.member.current.email}</td>
+              <td>
+                <button class="btn btn-primary"  data-toggle="modal" data-target="#exampleModal" >Edit</button>
+                <button class="btn btn-primary" onclick="deleteUser('${user._id}')">Delete</button>
+              </td>
+              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title" id="exampleModalLabel">Edit</h5>
+        
+          
+      </div>
+      <div class="modal-body">
+           <form >
+                  <div>
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control"  />
+                  </div>
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" />
+                  </div>
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control"  />
+                  </div>
+                  <button type="button" onclick="editUser('${user._id}')" class="btn btn-primary">Edit User</button>
+                </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>`;
+          tableBody.appendChild(row);
         });
-      });
-      const postData = async () => {
-        try {
-          const response = await axios.post(
-            "https://oemdieselparts.com/pic/changewatermark",
-            {
-              id: "648ab1684855601a64bcdf5d",
-              watermark: inputField.value,
-            }
-          );
 
+        const totalPages = Math.ceil(users.length / 10);
+        const pagination = document.getElementById("pagination");
+        pagination.innerHTML = "";
+
+        for (let i = 1; i <= totalPages; i++) {
+          const pageLink = document.createElement("a");
+          pageLink.href = "#";
+          pageLink.textContent = i;
+          pageLink.onclick = () => {
+            goToPage(i);
+          };
+
+          pagination.appendChild(pageLink);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const Logout = async () => {
+      try {
+        const response = await axios.post(
+          `https://oemdieselparts.com/pic/logout`);
+
+        localStorage.removeItem('access_token');
+
+        Toastify({
+          text: "successfully!",
+          duration: 3000,
+          close: true,
+          gravity: "top",
+        }).showToast();
+        if (response.data.message == 'Logout successful') {
+          window.location.href = "https://oemdieselparts.com/pic"
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    const searchUsers = () => {
+      const searchInput = document.getElementById("searchInput");
+      const searchValue = searchInput.value.toLowerCase();
+
+      const tableRows = document.querySelectorAll("#userTableBody tr");
+
+      tableRows.forEach((row) => {
+        const name = row.querySelector("td:first-child").textContent.toLowerCase();
+        const email = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
+
+        // if (name.includes(searchValue) || email.includes(searchValue)) {
+        //   row.style.display = "";
+        // } else {
+        //   row.style.display = "none";
+        // }
+      });
+    };
+
+    const goToPage = (page) => {
+      const tableRows = document.querySelectorAll("#userTableBody tr");
+
+      const startIndex = (page - 1) * 10;
+      const endIndex = startIndex + 9;
+
+      tableRows.forEach((row, index) => {
+        if (index >= startIndex && index <= endIndex) {
+          row.style.display = "";
+        } else {
+          row.style.display = "none";
+        }
+      });
+    };
+
+    const addUser = async (event) => {
+      event.preventDefault();
+
+      const nameInput = document.getElementById("name");
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+
+      const newUser = {
+        name: nameInput.value,
+        email: emailInput.value,
+        password: passwordInput.value
+      };
+
+      try {
+        const response = await axios.post("https://oemdieselparts.com/pic/api/addStaff", newUser);
+        console.log(response.data);
+        if (response?.data.message == "Staff member added successfully.") {
           Toastify({
             text: "successfully!",
             duration: 3000,
             close: true,
             gravity: "top",
           }).showToast();
-        } catch (error) {
-          console.error(error);
         }
-      };
-      const dataget = async () => {
-        try {
-          const response1 = await axios.get(
-            "https://oemdieselparts.com/pic/changewatermark"
-          );
-          const data = response1.data;
-
-          document.getElementById("demo").value = data.watermark;
-          document.getElementById("degvalue").innerHTML = data.deg + "&deg;";
-          document.getElementById("vol").value = data.deg;
-          const imgElement = document.getElementById("imgdiv");
-          imgElement.setAttribute("src", data.imagewatermark);
-          // document
-            // .getElementById(data.imagestyle + "btn")
-            // .classList.add("border12");
-          if (response1.data.watermarktype === "image") {
-            document.getElementById("flexSwitchCheckDefault").checked = true;
-            document
-              .getElementById("textwatermark")
-              .classList.remove("deactive");
-            document.getElementById("keyboard_box").classList.add("deactive");
-          } else {
-            document.getElementById("flexSwitchCheckDefault").checked = false;
-            document.getElementById("textwatermark").classList.add("deactive");
-            document
-              .getElementById("keyboard_box")
-              .classList.remove("deactive");
-          }
-        } catch (err) {
-          console.log(err);
+        if (id == '64b140978b4f61006c94595a') {
+          fetchUsers();
         }
-      };
-      dataget();
 
-      const Switch1 = async () => {
-        const checkbox = document.getElementById("flexSwitchCheckDefault");
-        let status;
+        nameInput.value = "";
+        emailInput.value = "";
+        passwordInput.value = "";
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-        if (checkbox.checked) {
-          document.getElementById("textwatermark").classList.remove("deactive");
-          document.getElementById("keyboard_box").classList.add("deactive");
+    const editUser = (userId) => {
+      console.log(`Editing user with ID: ${userId}`);
+      try {
+        const response = axios.get(
+          `https://oemdieselparts.com/pic/api/getSingleStaff?id=${userId}`);
+        Toastify({
+          text: "successfully!",
+          duration: 3000,
+          close: true,
+          gravity: "top",
+        }).showToast();
+      } catch (error) {
+        console.error(error);
+      }
 
-          status = "image";
-        } else {
-          document.getElementById("textwatermark").classList.add("deactive");
-          document.getElementById("keyboard_box").classList.remove("deactive");
+    };
 
-          status = "text";
-        }
-        try {
-          const response = await axios.post(
-            "https://oemdieselparts.com/pic/changewatermark",
-            {
-              id: "648ab1684855601a64bcdf5d",
-              watermarktype: status,
+
+    const deleteUser = (userId) => {
+      console.log(`Deleting user with ID: ${userId}`);
+      swal({
+        title: "Are you sure?",
+        text: "You will not be able to recover this imaginary file!",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, delete it!",
+        closeOnConfirm: false
+      },
+        async () => {
+
+          try {
+            const response = await axios.post(
+              `https://oemdieselparts.com/pic/api/deleteStaff?id=${userId}`);
+            if (response?.data.message == 'Staff member deleted successfully.') {
+
+              fetchUsers();
             }
-          );
-        } catch (error) {
-          console.error(error);
+
+
+          } catch (error) {
+            console.error(error);
+          }
+          swal("Deleted!", "Your imaginary file has been deleted.", "success");
+        });
+    };
+    if (id == '64b140978b4f61006c94595a') {
+      document.getElementById("searchInput").addEventListener("input", searchUsers);
+      document.getElementById("addUserForm").addEventListener("submit", addUser);
+      fetchUsers();
+    }
+
+
+
+    const inputField = document.getElementById("demo");
+    const keyboardButtons = document.querySelectorAll(
+      ".Key-module_row-button"
+    );
+
+    keyboardButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const buttonValue = button.getAttribute("data-key");
+
+        if (buttonValue === "Space") {
+          inputField.value += " ";
+        } else if (buttonValue === "back") {
+          inputField.value = inputField.value.slice(0, -1);
+        } else if (buttonValue === "en") {
+          postData(`${id}`);
+        } else {
+          inputField.value += buttonValue;
         }
-      };
+      });
+    });
+    const postData = async (userId) => {
+      console.log(userId)
+      try {
+        const response = await axios.post(
+          "https://oemdieselparts.com/pic/changewatermark",
+          {
+            id: id,
+            watermark: inputField.value,
+          }
+        );
+
+        Toastify({
+          text: "successfully!",
+          duration: 3000,
+          close: true,
+          gravity: "top",
+        }).showToast();
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    const dataget = async (userId) => {
+      try {
+        const response1 = await axios.get(
+          "https://oemdieselparts.com/pic/changewatermark?user_id=" + userId
+        );
+        const data = response1.data;
+        console.log(data,'daadasddas')
+        watermarkvalues.alignment=data.alignment
+        watermarkvalues.offsetx=data.offsetx
+        watermarkvalues.offsety=data.offsety
+        watermarkvalues.opacity=data.opacity
+        watermarkvalues.widthscale=data.widthscale
+        watermarkvalues.watermarktypeenable=data.watermarktypeenable
+        document.getElementById('Opacityrange').innerHTML=data.opacity
+        document.getElementById('customRange1').value=data.opacity
+       document.getElementById('width-scale').innerHTML=data.widthscale
+       document.getElementById('customRange2').value=data.widthscale
+       document.getElementById('x-range').value=data.offsetx
+       document.getElementById('y-range').value=data.offsety
+       document.getElementById("imgdiv").src=data.imagewatermark;
+       var defaultValue = data.alignment; // Replace with the actual value from the API
+
+// Find the radio button with the default value and set it as checked
+var radioButtons = document.getElementsByName("options");
+for (var i = 0; i < radioButtons.length; i++) {
+  if (radioButtons[i].value === defaultValue) {
+    radioButtons[i].checked = true;
+    break;
+  }
+}
+if(data.watermarktypeenable == 'enable'){
+  document.getElementById('flexSwitchCheckDefaultEnableDisable').checked=data.watermarktypeenable
+
+}
+
+        document.getElementById("demo").value = data.watermark;
+        document.getElementById("degvalue").innerHTML = data.deg + "&deg;";
+        document.getElementById("vol").value = data.deg;
+  
+
+        if (response1.data.watermarktypeenable === "enable") {
+          document.getElementById("flexSwitchCheckDefaultEnableDisable").checked = true;
+        } else {
+          document.getElementById("flexSwitchCheckDefaultEnableDisable").checked = false;
+        }
+
+        if (response1.data.watermarktype === "image") {
+          document.getElementById("flexSwitchCheckDefault").checked = true;
+          document
+            .getElementById("textwatermark")
+            .classList.remove("deactive");
+          document.getElementById("keyboard_box").classList.add("deactive");
+        } else {
+          document.getElementById("flexSwitchCheckDefault").checked = false;
+          document.getElementById("textwatermark").classList.add("deactive");
+          document
+            .getElementById("keyboard_box")
+            .classList.remove("deactive");
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    console.log(id, 'sdasadasdasd')
+    dataget(`${id}`);
+
+    const Switchenable = async (userId) => {
+      const checkbox = document.getElementById("flexSwitchCheckDefaultEnableDisable");
+      let status;
+
+      if (checkbox.checked) {
+        status = "enable";
+      } else {
+        status = "disable";
+      }
+      watermarkvalues.watermarktypeenable=status
+      try {
+        const response = await axios.post(
+          "https://oemdieselparts.com/pic/changewatermark",
+          watermarkvalues
+        );
+        console.log(response);
+        console.log(status);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const Switch1 = async (userId) => {
+      const checkbox = document.getElementById("flexSwitchCheckDefault");
+      let status;
+
+      if (checkbox.checked) {
+        document.getElementById("textwatermark").classList.remove("deactive");
+        document.getElementById("keyboard_box").classList.add("deactive");
+
+        status = "image";
+      } else {
+        document.getElementById("textwatermark").classList.add("deactive");
+        document.getElementById("keyboard_box").classList.remove("deactive");
+
+        status = "text";
+      }
+      try {
+        const response = await axios.post(
+          "https://oemdieselparts.com/pic/changewatermark",
+          {
+            id: id,
+            watermarktype: status,
+          }
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+
+
+
     </script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"
-    ></script>
-  </body>
+
+</body>
+
 </html>

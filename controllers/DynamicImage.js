@@ -5,14 +5,26 @@ import sharp from "sharp";
 import jwt from "jsonwebtoken";
 import ReplaceStatus from "../models/replacepage.js";
 import watermark from '../models/watermark.js'
+import staff from '../models/staff.js'
 import fsx from 'fs-extra';
 import { Console } from "console";
-import { createCanvas } from 'canvas';
+import { createCanvas, loadImage } from 'canvas';
+import fileCache from 'node-file-cache';
+import cache from '../cacheManager.js';
+
+async function adjustOpacity(imageBuffer, opacity) {
+  const img = await loadImage(imageBuffer);
+  const canvas = createCanvas(img.width, img.height);
+  const context = canvas.getContext('2d');
+  context.globalAlpha = opacity;
+  context.drawImage(img, 0, 0, img.width, img.height);
+  return canvas.toBuffer();
+}
+
+
 
 export const Allimage = async (req, res, next) => {
   try {
-	const watermarkchange = await watermark.findOne({ "id": "648ab1684855601a64bcdf5d" });
-
     const id = req.params.id;
     const segment1 = req.params.segment1;
     let segment2 = req.params.segment2;
@@ -23,8 +35,13 @@ export const Allimage = async (req, res, next) => {
     } else {
 	    img_url = "https://oemdieselparts.com/content/images/"+id+"/"+segment1+"/"+segment2;
     }
-
-
+    const cachedImage = cache.get(img_url);
+    if (cachedImage) {
+	  const cachedImageBuffer = Buffer.from(cachedImage, 'base64');
+      res.setHeader("Content-Type", "image/png");
+      res.send(cachedImageBuffer);
+      return;
+    }
 
 	await axios.head(img_url);
 
@@ -32,84 +49,113 @@ export const Allimage = async (req, res, next) => {
 	const imageBuffer = Buffer.from(response.data, "binary");
 	const image = await sharp(imageBuffer);
 
-	if (watermarkchange.watermarktype === "image") {
+    const replaceStatus = await ReplaceStatus.findOne({ "feature_imageold": img_url });
 
-		const metadata = await image.metadata();
-		const watermarkWidth = metadata.width;
-		const watermarkHeight = metadata.height;
+    const staffdetail = await staff.findOne({ "member.current.email": replaceStatus.AuthEmail });
+	let watermarkedImageBuffer = '';
+    if (staffdetail && staffdetail._id) {
+	    const watermarkchange = await watermark.findOne({ "userID": staffdetail._id.toString() });
 
-		const watermarkImagePath = watermarkchange.imagewatermark;
+		if (watermarkchange.watermarktype === "image" && watermarkchange.watermarktypeenable == 'enable') {
+			const metadata = await image.metadata();
+			const watermarkWidth = metadata.width;
+			const watermarkHeight = metadata.height;
+			const watermarkImagePath = watermarkchange.imagewatermark;
+			let offsetx = watermarkchange.offsetx;
+			let offsety = watermarkchange.offsety;
+			let topalign = 0;
 
-		const watermarkResponse = await axios.get(watermarkImagePath, { responseType: "arraybuffer" });
-		const watermarkBuffer = Buffer.from(watermarkResponse.data, "binary");
 
-		const watermarkImage = await sharp(watermarkBuffer)
-			.resize(watermarkWidth, watermarkHeight, { fit: 'inside' })
-			.ensureAlpha()
-			.toBuffer();
+			let leftalign = 0;
 
-		const watermarkedImageBuffer = await image
-			.clone()
-			.composite([{ input: watermarkImage }])
-			.toBuffer();
 
+			try {
+				if(offsetx > 0) {
+					offsetx = Math.floor(watermarkWidth * offsetx / 100);
+				}
+				if(offsety > 0) {
+					offsety = Math.floor(watermarkWidth * offsety / 100);
+				}
+				const watermarkResponse = await axios.get(watermarkImagePath, { responseType: "arraybuffer" });
+				const watermarkBuffer = Buffer.from(watermarkResponse.data, "binary");
+				const watermarkBufferWithOpacity = await adjustOpacity(watermarkBuffer, watermarkchange.opacity / 100);  // Adjust opacity as needed
+				const watermarkImageSharp = await sharp(watermarkBufferWithOpacity);
+				const water_metadata = await watermarkImageSharp.metadata();
+
+				let new_width = Math.floor(watermarkWidth * watermarkchange.widthscale / 100);
+				let new_height = Math.floor((new_width / water_metadata.width) * water_metadata.height);
+
+
+				let leftSpace = watermarkWidth - new_width;
+				let topSpace = watermarkHeight - new_height;
+
+				if(watermarkchange.alignment == 1) {
+					topalign = parseInt(Math.floor(0)) + parseInt(offsety);
+					leftalign = parseInt(Math.floor(0)) + parseInt(offsetx);
+				} else if(watermarkchange.alignment == 2) {
+					topalign = parseInt(Math.floor(0)) + parseInt(offsety);
+					leftalign = parseInt(Math.floor(leftSpace)) / parseInt(2);
+				} else if(watermarkchange.alignment == 3) {
+					topalign = parseInt(Math.floor(0)) + parseInt(offsety);
+					leftalign = parseInt(Math.floor(leftSpace)) - parseInt(offsetx);
+				} else if(watermarkchange.alignment == 4) {
+					topalign = parseInt(Math.floor(topSpace / 2)) + parseInt(offsety);
+					leftalign = parseInt(Math.floor(0)) + parseInt(offsetx);
+				} else if(watermarkchange.alignment == 5) {
+					topalign = parseInt(Math.floor(topSpace / 2)) + parseInt(offsety);
+					leftalign = parseInt(Math.floor(leftSpace)) / parseInt(2);
+				} else if(watermarkchange.alignment == 6) {
+					topalign = parseInt(Math.floor(topSpace / 2)) + parseInt(offsety);
+					leftalign = parseInt(Math.floor(leftSpace)) - parseInt(offsetx);
+				} else if(watermarkchange.alignment == 7) {
+					topalign = parseInt(Math.floor(topSpace)) - parseInt(offsety);
+					leftalign = parseInt(Math.floor(0)) + parseInt(offsetx);
+				} else if(watermarkchange.alignment == 8) {
+					topalign = parseInt(Math.floor(topSpace)) - parseInt(offsety);
+					leftalign = parseInt(Math.floor(leftSpace)) / parseInt(2);
+				} else if(watermarkchange.alignment == 9) {
+					topalign = parseInt(Math.floor(topSpace)) - parseInt(offsety);
+					leftalign = parseInt(Math.floor(leftSpace)) - parseInt(offsetx);
+				}
+
+
+				const watermarkImage = await watermarkImageSharp
+					.resize(new_width, new_height, { fit: 'inside' })
+					.ensureAlpha()
+					.toBuffer();
+
+				watermarkedImageBuffer = await image
+					.clone()
+					.composite([{ input: watermarkImage, top: topalign, left: leftalign }])
+					.toBuffer();
+			} catch (error) {
+				watermarkedImageBuffer = await image
+					.clone()
+					.toBuffer();
+			}
+
+		} else {
+			watermarkedImageBuffer = await image
+				.clone()
+				.toBuffer();
+		}
+        cache.set(img_url, watermarkedImageBuffer.toString('base64'));
+    	// console.log(watermarkedImageBuffer);
 
 		res.setHeader("Content-Type", "image/png");
      	res.send(watermarkedImageBuffer);
 	} else {
-		const textWatermark = watermarkchange.watermark;
-		const watermarkColor = "rgba(255, 255, 255, 0.5)";
+		watermarkedImageBuffer = await image
+			.clone()
+			.toBuffer();
 
-		const metadata = await image.metadata();
-		const watermarkWidth = metadata.width;
-		const watermarkHeight = metadata.height;
-		const angleInRadians = (watermarkchange.deg || 0) * Math.PI / 180;
+		cache.set(img_url, watermarkedImageBuffer.toString('base64'));
 
-		let centerX, centerY;
-		let fontSize = Math.min(watermarkWidth, watermarkHeight) * 0.5; // Adjust the factor as needed
-
-		const tempFontSize = (watermarkWidth * 0.8) / textWatermark.length;
-		fontSize = Math.min(fontSize, tempFontSize);
-
-		centerX = watermarkWidth / 2;
-		centerY = watermarkHeight / 2 + (fontSize / 2);
-
-		// Create a canvas to generate the text watermark
-		const canvas = createCanvas(watermarkWidth, watermarkHeight);
-		const context = canvas.getContext('2d');
-		context.fillStyle = watermarkColor;
-		context.font = `${fontSize}px Arial`;
-		context.textAlign = 'center';
-		context.textBaseline = 'middle';
-
-		// Rotate the context
-		context.translate(centerX, centerY);
-		context.rotate(angleInRadians);
-		context.translate(-centerX, -centerY);
-
-		context.fillText(textWatermark, centerX, centerY);
-
-		// Convert the canvas to a buffer
-		const watermarkBuffer = canvas.toBuffer();
-
-		const watermarkImage = await sharp(watermarkBuffer)
-		  .ensureAlpha()
-		  .toBuffer();
-
-		const watermarkedImageBuffer = await image
-		  .clone()
-		  .composite([{ input: watermarkImage }])
-		  .jpeg({ quality: 80 })
-		  .toBuffer();
-
-		// Send the watermarked image buffer as the response
-		res.setHeader("Content-Type", "image/jpeg");
-		res.send(watermarkedImageBuffer);
-
+		res.setHeader("Content-Type", "image/png");
+     	res.send(watermarkedImageBuffer);
 	}
 
   } catch (error) {
-    // Handle any errors that occur
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }

@@ -8,7 +8,6 @@ import ReplaceStatus from "../models/replacepage.js";
 import path from "path";
 import fs from "fs";
 import { json } from "stream/consumers";
-import watermark from '../models/watermark.js'
 import { Update } from "./PostUpdate.js";
 import { Updatepage12 } from './Updatepage.js'
 import fsx from 'fs-extra';
@@ -106,7 +105,7 @@ export const Allimage = async (req, res, next) => {
           }
         }
       };
-      fetchPage(13);
+      fetchPage(1);
 
 
     }
@@ -119,10 +118,10 @@ export const Allimage = async (req, res, next) => {
 }
 
 function processPostData(postData) {
-
   const postId = postData.id;
   const mobiledoc = JSON.parse(postData.mobiledoc);
   const featureImage = postData.feature_image;
+  const author = postData.primary_author;
   const updated_at = postData.updated_at;
   const title = postData.title;
 
@@ -136,6 +135,7 @@ function processPostData(postData) {
           title: title,
           mobiledoc: JSON.stringify(mobiledoc),
           feature_image: featureImage,
+          primary_author: author,
         },
       },
     },

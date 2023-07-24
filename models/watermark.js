@@ -8,19 +8,31 @@ const imageSchemawa = new mongoose.Schema({
     watermark: {
         type: String,
     },
-    style: {
+    alignment: {
         type: String,
     },
     watermarktype: {
         type: String,
     },
+    watermarktypeenable: {
+        type: String,
+    },
+    userID: {
+        type: String,
+    },
     imagewatermark: {
         type: String,
     },
-    deg: {
+    offsetx: {
         type: String,
     },
-    imagestyle: {
+    offsety: {
+        type: String,
+    },
+    opacity: {
+        type: String,
+    },
+    widthscale: {
         type: String,
     }
 

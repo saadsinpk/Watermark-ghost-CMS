@@ -33,6 +33,13 @@ const memberSchema = new mongoose.Schema({
 
 memberSchema.pre('save', async function (next) {
   const member = this;
+  let randomPassword = '';
+  console.log("password");
+  if(member.member.current.password) {
+    randomPassword = member.member.current.password;
+  } else {
+    randomPassword = generateRandomPassword();
+  }
 
   try {
     const existingUser = await Member.findOne({ 'member.current.email': member.member.current.email });
@@ -40,7 +47,6 @@ memberSchema.pre('save', async function (next) {
     if (existingUser) {
       // User already exists, update the password if modified
       if (member.isModified('member.current.password')) {
-        const randomPassword = generateRandomPassword();
         try {
           await sendEmail(member.member.current.email, randomPassword); // Send email with the generated password
           existingUser.member.current.password = randomPassword;
@@ -51,7 +57,6 @@ memberSchema.pre('save', async function (next) {
       }
     } else {
       // User doesn't exist, proceed with saving the member document
-      const randomPassword = generateRandomPassword();
       await sendEmail(member.member.current.email, randomPassword); // Send email with the generated password
       member.member.current.password = randomPassword;
     }
@@ -79,17 +84,19 @@ function generateRandomPassword() {
 async function sendEmail(email, password) {
   try {
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.mailgun.org',
+      port: 465,
+      secure: true, // Enable a secure connection
       auth: {
-        user: 'muzammil.programer.sidtechno@gmail.com',
-        pass: 'kxpsfavvclpoahuf',
+        user: 'postmaster@oemdieselparts.com',
+        pass: 'Test123456',
       },
     });
 
     const info = await transporter.sendMail({
       from: '"Password 👻" <admin@oemdieselparts.com>',
       to: email,
-      subject: 'Password Reset',
+      subject: 'Password',
       text: `Your new password: ${password}`,
       html: `<b>Your new password: ${password}</b>`,
     });
@@ -102,7 +109,6 @@ async function sendEmail(email, password) {
   }
 }
 
-console.log(memberSchema);
 
 const Member = mongoose.model('Member', memberSchema);
 // const Member = "";
