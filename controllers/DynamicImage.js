@@ -10,7 +10,7 @@ import fsx from 'fs-extra';
 import { Console } from "console";
 import { createCanvas, loadImage } from 'canvas';
 import fileCache from 'node-file-cache';
-import cache from '../cacheManager.js';
+// import imageCacheManager from '../cacheManager.js';
 
 async function adjustOpacity(imageBuffer, opacity) {
   const img = await loadImage(imageBuffer);
@@ -24,6 +24,25 @@ async function adjustOpacity(imageBuffer, opacity) {
 
 
 export const Allimage = async (req, res, next) => {
+	async function saveImageToDisk(filename, fileBuffer) {
+	  const filePath = path.join('/home/backend/tmp', filename); // Update the path as needed
+	  try {
+	    await fs.promises.writeFile(filePath, fileBuffer);
+	  } catch (err) {
+	    console.error(`Error saving ${filename} to disk:`, err);
+	  }
+	}
+	async function getImageFromDisk(filename) {
+	  const filePath = path.join('/home/backend/tmp', filename); // Update the path as needed
+	  try {
+	    const fileBuffer = await fs.promises.readFile(filePath);
+	    return fileBuffer;
+	  } catch (err) {
+	    // console.error(`Error getting ${filename} from disk:`, err);
+	    return null;
+	  }
+	}
+
   try {
     const id = req.params.id;
     const segment1 = req.params.segment1;
@@ -35,7 +54,7 @@ export const Allimage = async (req, res, next) => {
     } else {
 	    img_url = "https://oemdieselparts.com/content/images/"+id+"/"+segment1+"/"+segment2;
     }
-    const cachedImage = cache.get(img_url);
+    const cachedImage = await getImageFromDisk(id+"-"+segment1+"-"+segment2);
     if (cachedImage) {
 	  const cachedImageBuffer = Buffer.from(cachedImage, 'base64');
       res.setHeader("Content-Type", "image/png");
@@ -90,32 +109,32 @@ export const Allimage = async (req, res, next) => {
 				let topSpace = watermarkHeight - new_height;
 
 				if(watermarkchange.alignment == 1) {
-					topalign = parseInt(Math.floor(0)) + parseInt(offsety);
-					leftalign = parseInt(Math.floor(0)) + parseInt(offsetx);
+					topalign = Math.floor(parseInt(Math.floor(0)) + parseInt(offsety));
+					leftalign = Math.floor(parseInt(Math.floor(0)) + parseInt(offsetx));
 				} else if(watermarkchange.alignment == 2) {
-					topalign = parseInt(Math.floor(0)) + parseInt(offsety);
-					leftalign = parseInt(Math.floor(leftSpace)) / parseInt(2);
+					topalign = Math.floor(parseInt(Math.floor(0)) + parseInt(offsety));
+					leftalign = Math.floor(parseInt(Math.floor(leftSpace)) / parseInt(2));
 				} else if(watermarkchange.alignment == 3) {
-					topalign = parseInt(Math.floor(0)) + parseInt(offsety);
-					leftalign = parseInt(Math.floor(leftSpace)) - parseInt(offsetx);
+					topalign = Math.floor(parseInt(Math.floor(0)) + parseInt(offsety));
+					leftalign = Math.floor(parseInt(Math.floor(leftSpace)) - parseInt(offsetx));
 				} else if(watermarkchange.alignment == 4) {
-					topalign = parseInt(Math.floor(topSpace / 2)) + parseInt(offsety);
-					leftalign = parseInt(Math.floor(0)) + parseInt(offsetx);
+					topalign = Math.floor(parseInt(Math.floor(topSpace / 2)) + parseInt(offsety));
+					leftalign = Math.floor(parseInt(Math.floor(0)) + parseInt(offsetx));
 				} else if(watermarkchange.alignment == 5) {
-					topalign = parseInt(Math.floor(topSpace / 2)) + parseInt(offsety);
-					leftalign = parseInt(Math.floor(leftSpace)) / parseInt(2);
+					topalign = Math.floor(parseInt(Math.floor(topSpace / 2)) + parseInt(offsety));
+					leftalign = Math.floor(parseInt(Math.floor(leftSpace)) / parseInt(2));
 				} else if(watermarkchange.alignment == 6) {
-					topalign = parseInt(Math.floor(topSpace / 2)) + parseInt(offsety);
-					leftalign = parseInt(Math.floor(leftSpace)) - parseInt(offsetx);
+					topalign = Math.floor(parseInt(Math.floor(topSpace / 2)) + parseInt(offsety));
+					leftalign = Math.floor(parseInt(Math.floor(leftSpace)) - parseInt(offsetx));
 				} else if(watermarkchange.alignment == 7) {
-					topalign = parseInt(Math.floor(topSpace)) - parseInt(offsety);
-					leftalign = parseInt(Math.floor(0)) + parseInt(offsetx);
+					topalign = Math.floor(parseInt(Math.floor(topSpace)) - parseInt(offsety));
+					leftalign = Math.floor(parseInt(Math.floor(0)) + parseInt(offsetx));
 				} else if(watermarkchange.alignment == 8) {
-					topalign = parseInt(Math.floor(topSpace)) - parseInt(offsety);
-					leftalign = parseInt(Math.floor(leftSpace)) / parseInt(2);
+					topalign = Math.floor(parseInt(Math.floor(topSpace)) - parseInt(offsety));
+					leftalign = Math.floor(parseInt(Math.floor(leftSpace)) / parseInt(2));
 				} else if(watermarkchange.alignment == 9) {
-					topalign = parseInt(Math.floor(topSpace)) - parseInt(offsety);
-					leftalign = parseInt(Math.floor(leftSpace)) - parseInt(offsetx);
+					topalign = Math.floor(parseInt(Math.floor(topSpace)) - parseInt(offsety));
+					leftalign = Math.floor(parseInt(Math.floor(leftSpace)) - parseInt(offsetx));
 				}
 
 
@@ -139,8 +158,7 @@ export const Allimage = async (req, res, next) => {
 				.clone()
 				.toBuffer();
 		}
-        cache.set(img_url, watermarkedImageBuffer.toString('base64'));
-    	// console.log(watermarkedImageBuffer);
+		await saveImageToDisk(id+"-"+segment1+"-"+segment2, watermarkedImageBuffer);
 
 		res.setHeader("Content-Type", "image/png");
      	res.send(watermarkedImageBuffer);
@@ -149,7 +167,7 @@ export const Allimage = async (req, res, next) => {
 			.clone()
 			.toBuffer();
 
-		cache.set(img_url, watermarkedImageBuffer.toString('base64'));
+		await saveImageToDisk(id+"-"+segment1+"-"+segment2, watermarkedImageBuffer);
 
 		res.setHeader("Content-Type", "image/png");
      	res.send(watermarkedImageBuffer);
